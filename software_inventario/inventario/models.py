@@ -43,7 +43,7 @@ class Entradas(models.Model):
     valorUnidad=models.DecimalField(max_digits=30,decimal_places=2)
 
     def __str__(self):
-        return f"{self.cantidadEntrada}"
+        return f"{self.cantidadEntrada}" #esto es una prueba
 
 class Salidas(models.Model):
     idSalida=models.BigAutoField(primary_key=True,blank=True)
