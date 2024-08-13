@@ -40,7 +40,7 @@ class Entradas(models.Model):
     unidadMedida=models.CharField(max_length=150)
     observacion=models.CharField(max_length=150)
     cantidadEntrada=models.IntegerField()
-    valorUnidad=models.DecimalField(max_digits=30,decimal_places=2)
+    valorUnidad=models.DecimalField(max_digits=30,decimal_places=0)
 
     def __str__(self):
         return f"{self.cantidadEntrada}" #esto es una prueba
