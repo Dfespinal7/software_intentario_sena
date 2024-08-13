@@ -23,7 +23,11 @@ def listar_producto(request):
     return render(request,'inventario/producto/listar_producto.html',context)
 
 def form_guardar(request):
-    return render(request,'inventario/producto/form_productos.html')
+    k=Categorias.objects.all()
+    p=Proveedores.objects.all()
+    c=Clientes.objects.all()
+    contex={"categorias":k,"proveedores":p,"clientes":c}
+    return render(request,'inventario/producto/form_productos.html',contex)
 
 def guardar_datos(request):
     pass

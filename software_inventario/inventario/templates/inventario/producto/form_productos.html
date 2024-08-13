@@ -19,12 +19,25 @@
                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="mb-3">
-                                <label for="input1" class="form-label">Campo 1</label>
-                                <input type="text" class="form-control" id="input1" name="campo1" placeholder="Ingresa el dato">
+                                <label for="input1" class="form-label">Categoria</label>
+                                <select name="" id="" class="form-control">
+                                    <option value="">Seleccione Categoria</option>
+                                    {% for i in categorias %}
+                                    <option value="{{i.idCategoria}}">{{i.nombreCategoria}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="mb-3">
-                                <label for="input2" class="form-label">Campo 2</label>
-                                <input type="text" class="form-control" id="input2" name="campo2" placeholder="Ingresa el dato">
+                                <label for="input2" class="form-label">Nombre del Producto</label>
+                                <input type="text" class="form-control" id="input2" name="campo2" placeholder="Ingresa el Producto">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input2" class="form-label">Unidad de medida</label>
+                                <input type="text" class="form-control" id="input2" name="campo2" placeholder="Ingresa Unidad de medida">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input2" class="form-label">Stock</label>
+                                <input type="text" class="form-control" id="input2" name="campo2" placeholder="Este campo se autocompleta cuando crees la enrada y la salida" readonly>
                             </div>
                         </div>
                     </div>
@@ -40,12 +53,25 @@
                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="mb-3">
-                                <label for="input3" class="form-label">Campo 3</label>
-                                <input type="text" class="form-control" id="input3" name="campo3" placeholder="Ingresa el dato">
+                                <label for="input3" class="form-label">Proveedores</label>
+                                <select name="" id="" class="form-control">
+                                    <option value="">Selecciones Proveedor</option>
+                                    {% for i in proveedores %}
+                                    <option value="{{i.idProveedor}}">{{i.nombre}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="mb-3">
-                                <label for="input4" class="form-label">Campo 4</label>
-                                <input type="text" class="form-control" id="input4" name="campo4" placeholder="Ingresa el dato">
+                                <label for="input4" class="form-label">Obsevación</label>
+                                <input type="text" class="form-control" id="input4" name="campo4" placeholder="Ingresa Observación">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input4" class="form-label">Cantidad</label>
+                                <input type="text" class="form-control" id="input4" name="campo4" placeholder="Ingresa Cantidad">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input4" class="form-label">Valor de unidad</label>
+                                <input type="text" class="form-control" id="input4" name="campo4" placeholder="Ingresa Valor">
                             </div>
                         </div>
                     </div>
@@ -61,12 +87,29 @@
                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="mb-3">
-                                <label for="input5" class="form-label">Campo 5</label>
-                                <input type="text" class="form-control" id="input5" name="campo5" placeholder="Ingresa el dato">
+                                <label for="input5" class="form-label">Cliente</label>
+                                <select name="" id="documento" onchange="actdocumento()" class="form-control">
+                                    <option value="" >Seleccione Cliente</option>
+                                    {% for i in clientes %}
+                                    <option value="{{i.idCliente}}" data-documento="{{i.documento}}">{{i.nombre}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="mb-3">
-                                <label for="input6" class="form-label">Campo 6</label>
-                                <input type="text" class="form-control" id="input6" name="campo6" placeholder="Ingresa el dato">
+                                <label for="input6" class="form-label">Documento del Cliente</label>
+                                <input type="text" class="form-control" id="doc" name="campo6" placeholder="Ingresa el Documento" >
+                            </div>
+                            <div class="mb-3">
+                                <label for="input6" class="form-label">observación</label>
+                                <input type="text" class="form-control" id="input6" name="campo6" placeholder="Ingresa el Obsevación">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input6" class="form-label">Cantidad de salida</label>
+                                <input type="text" class="form-control" id="input6" name="campo6" placeholder="Ingresa Cantidad">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input6" class="form-label">Valor de unidad</label>
+                                <input type="text" class="form-control" id="input6" name="campo6" placeholder="Ingresa Valor">
                             </div>
                         </div>
                     </div>
@@ -79,6 +122,9 @@
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </div>
         </form>
+
+        <script src="{% static 'inventario/js/funciones.js' %}"></script>
+
     </div>
     
       
