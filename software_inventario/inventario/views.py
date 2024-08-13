@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from .models import *
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
 
 def inicio(request):
     return render(request,'inventario/inicio.html')
@@ -21,3 +24,6 @@ def listar_producto(request):
 
 def form_guardar(request):
     return render(request,'inventario/producto/form_productos.html')
+
+def guardar_datos(request):
+    pass

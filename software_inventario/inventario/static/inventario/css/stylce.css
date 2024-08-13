@@ -1,7 +1,0 @@
-.dropdown-menu-form {
-    display: none; /* Ocultamos el formulario inicialmente */
-    position: absolute; /* Para que el formulario se muestre sobre otros elementos */
-    top: 100%; /* Alineamos el formulario justo debajo del botón */
-    left: 0;
-    z-index: 1000; /* Aseguramos que esté encima de otros elementos */
-  }
