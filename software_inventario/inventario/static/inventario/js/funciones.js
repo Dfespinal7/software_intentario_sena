@@ -12,9 +12,18 @@ function cantidadStock() {
     var resultado = entrada - salida;
     
     // Establece el resultado en el campo de stock
-    document.getElementById('stock').value = resultado;
+    var stockField = document.getElementById('stock');
+    stockField.value = resultado;
+    valorInv();
+}
+function valorInv(){
+    stock=parseInt(document.getElementById("stock").value)||0
+    ent=parseInt(document.getElementById("valoruni").value)||0
+    result=stock*ent
+    document.getElementById("valorinv").value=result
 }
 
 // Agrega eventos de input a los campos de entrada y salida
 document.getElementById('ent').addEventListener('input', cantidadStock);
 document.getElementById('sal').addEventListener('input', cantidadStock);
+document.getElementById('valoruni').addEventListener('input', valorInv);

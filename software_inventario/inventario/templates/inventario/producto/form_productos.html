@@ -19,8 +19,9 @@
                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="mb-3">
+                                <input type="hidden" name="idProducto" value="{{idProducto}}">
                                 <label for="input1" class="form-label">Categoria</label>
-                                <select name="" id="" class="form-control">
+                                <select name="idCategoria" id="" class="form-control">
                                     <option value="">Seleccione Categoria</option>
                                     {% for i in categorias %}
                                     <option value="{{i.idCategoria}}">{{i.nombreCategoria}}</option>
@@ -29,11 +30,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="input2" class="form-label">Nombre del Producto</label>
-                                <input type="text" class="form-control" id="input2" name="campo2" placeholder="Ingresa el Producto">
+                                <input type="text" class="form-control" id="input2" name="nombreProducto" placeholder="Ingresa el Producto">
                             </div>
                             <div class="mb-3">
                                 <label for="input2" class="form-label">Unidad de medida</label>
-                                <input type="text" class="form-control" id="input2" name="campo2" placeholder="Ingresa Unidad de medida">
+                                <input type="text" class="form-control" id="input2" name="unidadMedida" placeholder="Ingresa Unidad de medida">
                             </div>
                             
                         </div>
@@ -50,8 +51,9 @@
                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="mb-3">
+                                <input type="hidden" name="idEntrada" value="{{idEntrada}}">
                                 <label for="input3" class="form-label">Proveedores</label>
-                                <select name="" id="" class="form-control">
+                                <select name="idProveedor" id="" class="form-control">
                                     <option value="">Selecciones Proveedor</option>
                                     {% for i in proveedores %}
                                     <option value="{{i.idProveedor}}">{{i.nombre}}</option>
@@ -60,15 +62,15 @@
                             </div>
                             <div class="mb-3">
                                 <label for="input4" class="form-label">Obsevación</label>
-                                <input type="text" class="form-control" id="input4" name="campo4" placeholder="Ingresa Observación">
+                                <input type="text" class="form-control" id="input4" name="obsent" placeholder="Ingresa Observación">
                             </div>
                             <div class="mb-3">
                                 <label for="input4" class="form-label">Cantidad Entrada</label>
-                                <input type="text" class="form-control" id="ent" name="campo4" placeholder="Ingresa Cantidad">
+                                <input type="text" class="form-control" id="ent" name="cantent" placeholder="Ingresa Cantidad">
                             </div>
                             <div class="mb-3">
                                 <label for="input4" class="form-label">Valor de unidad</label>
-                                <input type="text" class="form-control" id="input4" name="campo4" placeholder="Ingresa Valor">
+                                <input type="text" class="form-control" id="valoruni" name="valoruEntr" placeholder="Ingresa Valor">
                             </div>
                         </div>
                     </div>
@@ -84,8 +86,9 @@
                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="mb-3">
+                                <input type="hidden" name="idSalida" value="{{idSalida}}">
                                 <label for="input5" class="form-label">Cliente</label>
-                                <select name="" id="documento" onchange="actDocumento()" class="form-control">
+                                <select name="idCliente" id="documento" onchange="actDocumento()" class="form-control">
                                     <option value="" >Seleccione Cliente</option>
                                     {% for i in clientes %}
                                     <option value="{{i.idCliente}}" data-documento="{{i.documento}}">{{i.nombre}}</option>
@@ -94,19 +97,19 @@
                             </div>
                             <div class="mb-3">
                                 <label for="input6" class="form-label">Documento del Cliente</label>
-                                <input type="text" class="form-control" id="doc" name="campo6" placeholder="Ingresa el Documento" readonly>
+                                <input type="text" class="form-control" id="doc" name="documento" placeholder="Ingresa el Documento" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="input6" class="form-label">observación</label>
-                                <input type="text" class="form-control" id="input6" name="campo6" placeholder="Ingresa el Obsevación">
+                                <input type="text" class="form-control" id="input6" name="obssal" placeholder="Ingresa el Obsevación">
                             </div>
                             <div class="mb-3">
                                 <label for="input6" class="form-label">Cantidad de salida</label>
-                                <input type="text" class="form-control" id="sal" name="campo6" placeholder="Ingresa Cantidad">
+                                <input type="text" class="form-control" id="sal" name="cantsal" placeholder="Ingresa Cantidad">
                             </div>
                             <div class="mb-3">
                                 <label for="input6" class="form-label">Valor de unidad</label>
-                                <input type="text" class="form-control" id="input6" name="campo6" placeholder="Ingresa Valor">
+                                <input type="text" class="form-control" id="input6" name="valoruSal" placeholder="Ingresa Valor">
                             </div>
                         </div>
                     </div>
@@ -115,7 +118,11 @@
             </div>
             <div class="mb-3">
                 <label for="input2" class="form-label">Stock</label>
-                <input type="text" class="form-control" id="stock" name="campo2" placeholder="Cantidad de stock" readonly>
+                <input type="text" class="form-control" id="stock" name="stock" placeholder="Cantidad de stock" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="input2" class="form-label">Valor Inventario</label>
+                <input type="text" class="form-control" id="valorinv" name="" placeholder="Valor inventario" readonly>
             </div>
 
             <!-- Botón de Enviar -->
