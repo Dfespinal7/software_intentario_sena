@@ -53,4 +53,13 @@ def guardar_datos(request):
         obssal=request.POST.get("obssal")
         cantsal=request.POST.get("cantsal")
         valoruSal=request.POST.get("valoruSal")
-
+        #stock
+        idStockInventadrio=request.POST.get("idStock")
+        #idCategoria=Categorias.objects.get(pk=request.POST.get("idCategoria"))
+        #idProducto=request.POST.get("idProducto")
+        #unidadMedi=request.POST.get("unidadMedida")
+        #idEntrada=request.POST.get("idEntrada")
+        #idSalida=request.POST.get("idSalida")
+        #stock=request.POST.get("stock")
+        #valoruEntr=request.POST.get("valoruEntr")
+        valorinv=request.POST.get("valorinv")
