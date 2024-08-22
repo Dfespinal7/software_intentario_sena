@@ -65,7 +65,7 @@ def guardar_datos(request):
         valorinv=request.POST.get("valorinv")
         
 
-        q=Productos(idCategoria=idCategoria,nombreProducto=nombre,unidadMedida=unidadMedi,stock=stock)
+        q=Productos(idProducto=idProducto,idCategoria=idCategoria,nombreProducto=nombre,unidadMedida=unidadMedi,stock=stock)
         q.save()
         messages.success(request, "Producto creado correctamente")
         
@@ -85,3 +85,9 @@ def guardar_datos(request):
         messages.success(request, "Stock Creado Correctamente")
         
         return HttpResponseRedirect(reverse('listar_producto',args=()))
+    
+
+def listar_salida(request):
+        k=Salidas.objects.all()
+        context={"data":k}
+        return render(request,'inventario/salida/listar_salidas.html',context)   

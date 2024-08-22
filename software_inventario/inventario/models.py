@@ -24,7 +24,7 @@ class Proveedores(models.Model):
         return f"{self.nombre}"
 
 class Productos(models.Model):
-    idProducto=models.BigAutoField(primary_key=True,blank=True)
+    idProducto=models.CharField(primary_key=True,blank=True,max_length=150)
     idCategoria=models.ForeignKey(Categorias,on_delete=models.CASCADE)
     nombreProducto=models.CharField(max_length=150)
     unidadMedida=models.CharField(max_length=150)
@@ -58,7 +58,7 @@ class Salidas(models.Model):
         return f"{self.cantidadSalida}"
 
 class StockInventarios(models.Model):
-    idStockInventadrio=models.BigAutoField(primary_key=True,blank=True)
+    idStockInventario=models.BigAutoField(primary_key=True,blank=True)
     nombreCategoria=models.CharField(max_length=150) #viene del producto
     idProducto=models.ForeignKey(Productos,on_delete=models.CASCADE) #va el nombre del producto
     unidadMedida=models.CharField(max_length=150) #va el nombre del producto
