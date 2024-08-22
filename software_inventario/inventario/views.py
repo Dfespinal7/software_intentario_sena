@@ -39,7 +39,7 @@ def guardar_datos(request):
         stock=request.POST.get("stock")
         #Entrada
         idEntrada=request.POST.get("idEntrada")
-        idProveedor=Productos.objects.get(pk=request.POST.get("idProveedor"))
+        idProveedor=Proveedores.objects.get(pk=request.POST.get("idProveedor"))
         #idProducto=request.POST.get("idProducto")
         #unidadMedi=request.POST.get("unidadMedida")
         obsent=request.POST.get("obsent")
@@ -48,7 +48,7 @@ def guardar_datos(request):
         #Salida
         idSalida=request.POST.get("idSalida")
         #idProducto=request.POST.get("idProducto")
-        idCliente=Clientes.objects.get("idCliente")
+        idCliente=Clientes.objects.get(pk=request.POST.get("idCliente"))
         doc=request.POST.get("documento")
         obssal=request.POST.get("obssal")
         cantsal=request.POST.get("cantsal")
@@ -63,3 +63,25 @@ def guardar_datos(request):
         #stock=request.POST.get("stock")
         #valoruEntr=request.POST.get("valoruEntr")
         valorinv=request.POST.get("valorinv")
+        
+
+        q=Productos(idCategoria=idCategoria,nombreProducto=nombre,unidadMedida=unidadMedi,stock=stock)
+        q.save()
+        messages.success(request, "Producto creado correctamente")
+        
+        k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=cantent,valorUnidad=valoruEntr)
+        k.save()
+        messages.success(request, "Entrada Creada Correctamente")
+
+        s=Salidas(idProducto=q,idCliente=idCliente,documento=doc,observacion=obssal,cantidadSalida=cantsal,valorUnidad=valoruSal)
+        s.save()
+        messages.success(request, "Salida Creada Correctamente")
+        cat=q.idCategoria
+        unim=q.unidadMedida
+        stock1=q.stock
+        uni=k.valorUnidad
+        inv=StockInventarios(nombreCategoria=cat,idProducto=q,unidadMedida=unim,idEntrada=k,idSalida=s,stock=stock1,valorUnidad=uni,valorInvenario=valorinv)
+        inv.save()
+        messages.success(request, "Stock Creado Correctamente")
+        
+        return HttpResponseRedirect(reverse('listar_producto',args=()))

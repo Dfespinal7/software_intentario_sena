@@ -6,7 +6,8 @@
     <h1 class="text-center">Formulario</h1>
 
     <div class="container mt-5">
-        <form id="mainForm">
+        <form id="mainForm" action="{% url 'guardar_datos' %}" method="post">
+            {% csrf_token %}
             <div class="accordion" id="accordionExample">
 
                 <!-- Primer Formulario -->
