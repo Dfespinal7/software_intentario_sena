@@ -52,7 +52,7 @@ class Salidas(models.Model):
     documento=models.CharField(max_length=150)  #viene del cliente
     observacion=models.CharField(max_length=150)
     cantidadSalida=models.IntegerField()
-    valorUnidad=models.DecimalField(max_digits=30,decimal_places=2)
+    valorUnidad=models.IntegerField()
 
     def __str__(self):
         return f"{self.cantidadSalida}"

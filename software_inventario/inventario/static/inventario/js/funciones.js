@@ -23,6 +23,8 @@ function valorInv(){
     document.getElementById("valorinv").value=result
 }
 
+
+
 // Agrega eventos de input a los campos de entrada y salida
 document.getElementById('ent').addEventListener('input', cantidadStock);
 document.getElementById('sal').addEventListener('input', cantidadStock);
