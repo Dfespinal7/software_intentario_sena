@@ -92,5 +92,5 @@ def listar_salida(request):
         context={"data":k}
         return render(request,'inventario/salida/listar_salidas.html',context)
 
-def editar_producto(request,idProfucto):
+def editar_producto(request,idProducto):
      pass
