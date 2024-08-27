@@ -90,4 +90,7 @@ def guardar_datos(request):
 def listar_salida(request):
         k=Salidas.objects.all()
         context={"data":k}
-        return render(request,'inventario/salida/listar_salidas.html',context)   
+        return render(request,'inventario/salida/listar_salidas.html',context)
+
+def editar_producto(request,idProfucto):
+     pass
