@@ -21,12 +21,12 @@
                         <div class="accordion-body">
                             <div class="mb-3">
                                 <label for="input2" class="form-label">Codigo del Producto</label>
-                                <input type="text" class="form-control" id="input2" name="idProducto" placeholder="Ingresa codigo del Producto" value="{{idProducto}}">
+                                <input type="text" class="form-control" id="input2" name="idProducto" placeholder="Ingresa codigo del Producto" value="{{idProducto}}" required>
                             </div>
                             <div class="mb-3">
                                 <input type="hidden" name="idStock" value="{{idStockInventadrio}}">
                                 <label for="input1" class="form-label">Categoria</label>
-                                <select name="idCategoria" id="" class="form-control">
+                                <select name="idCategoria" id="" class="form-control" required>
                                     <option value="">Seleccione Categoria</option>
                                     {% for i in categorias %}
                                     <option value="{{i.idCategoria}}">{{i.nombreCategoria}}</option>
@@ -35,7 +35,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="input2" class="form-label">Nombre del Producto</label>
-                                <input type="text" class="form-control" id="input2" name="nombreProducto" placeholder="Ingresa el Producto">
+                                <input type="text" class="form-control" id="input2" name="nombreProducto" placeholder="Ingresa el Producto" required>
                             </div>
                             <div class="mb-3">
                                 <label for="input2" class="form-label">Unidad de medida</label>

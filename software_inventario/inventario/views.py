@@ -101,3 +101,8 @@ def listar_cliente(request):
      q=Clientes.objects.all()
      contex={"data":q}
      return render(request,'inventario/cliente/listar_cliente.html',contex)
+ 
+def listar_categoria(request):
+     q=Categorias.objects.all()
+     contex={"data":q}
+     return render(request,'inventario/categoria/listar_categoria.html',contex)
