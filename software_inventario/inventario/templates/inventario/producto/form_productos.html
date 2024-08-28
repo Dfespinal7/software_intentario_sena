@@ -58,8 +58,8 @@
                             <div class="mb-3">
                                 <input type="hidden" name="idEntrada" value="{{idEntrada}}">
                                 <label for="input3" class="form-label">Proveedores</label>
-                                <select name="idProveedor" id="" class="form-control">
-                                    <option value="">Selecciones Proveedor</option>
+                                <select name="idProveedor" id="2" class="form-control">
+                                    <option value="2">Selecciones Proveedor</option>
                                     {% for i in proveedores %}
                                     <option value="{{i.idProveedor}}">{{i.nombre}}</option>
                                     {% endfor %}
@@ -94,7 +94,7 @@
                                 <input type="hidden" name="idSalida" value="{{idSalida}}">
                                 <label for="input5" class="form-label">Cliente</label>
                                 <select name="idCliente" id="documento" onchange="actDocumento()" class="form-control">
-                                    <option value="" >Seleccione Cliente</option>
+                                    <option value="2" >Seleccione Cliente</option>
                                     {% for i in clientes %}
                                     <option value="{{i.idCliente}}" data-documento="{{i.documento}}">{{i.nombre}}</option>
                                     {% endfor %}

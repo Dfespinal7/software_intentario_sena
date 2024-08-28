@@ -8,4 +8,6 @@ urlpatterns = [
     path('form_guardar', form_guardar,name="form_guardar"),
     path('guardar_datos', guardar_datos,name="guardar_datos"),
     path('listar_salida',listar_salida,name="listar_salida"),
+    path('listar_proveedor',listar_proveedor,name="listar_proveedor"),
+    path('listar_cliente',listar_cliente,name="listar_cliente"),
 ]

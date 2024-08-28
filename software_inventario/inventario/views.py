@@ -36,23 +36,23 @@ def guardar_datos(request):
         idCategoria=Categorias.objects.get(pk=request.POST.get("idCategoria"))
         nombre=request.POST.get("nombreProducto")
         unidadMedi=request.POST.get("unidadMedida")
-        stock=request.POST.get("stock")
+        stock=request.POST.get("stock",0) or 0
         #Entrada
         idEntrada=request.POST.get("idEntrada")
         idProveedor=Proveedores.objects.get(pk=request.POST.get("idProveedor"))
         #idProducto=request.POST.get("idProducto")
         #unidadMedi=request.POST.get("unidadMedida")
         obsent=request.POST.get("obsent")
-        cantent=request.POST.get("cantent")
-        valoruEntr=request.POST.get("valoruEntr")
+        cantent=request.POST.get("cantent",0) or 0
+        valoruEntr=request.POST.get("valoruEntr",0) or 0
         #Salida
         idSalida=request.POST.get("idSalida")
         #idProducto=request.POST.get("idProducto")
         idCliente=Clientes.objects.get(pk=request.POST.get("idCliente"))
-        doc=request.POST.get("documento")
+        doc=request.POST.get("documento",0)or 0
         obssal=request.POST.get("obssal")
-        cantsal=request.POST.get("cantsal")
-        valoruSal=request.POST.get("valoruSal")
+        cantsal=request.POST.get("cantsal",0) or 0
+        valoruSal=request.POST.get("valoruSal",0) or 0
         #stock
         idStockInventadrio=request.POST.get("idStock")
         #idCategoria=Categorias.objects.get(pk=request.POST.get("idCategoria"))
@@ -62,7 +62,7 @@ def guardar_datos(request):
         #idSalida=request.POST.get("idSalida")
         #stock=request.POST.get("stock")
         #valoruEntr=request.POST.get("valoruEntr")
-        valorinv=request.POST.get("valorinv")
+        valorinv=request.POST.get("valorinv",0) or 0
         
 
         q=Productos(idProducto=idProducto,idCategoria=idCategoria,nombreProducto=nombre,unidadMedida=unidadMedi,stock=stock)
@@ -92,5 +92,12 @@ def listar_salida(request):
         context={"data":k}
         return render(request,'inventario/salida/listar_salidas.html',context)
 
-def editar_producto(request,idProducto):
-     pass
+def listar_proveedor(request):
+     q=Proveedores.objects.all()
+     contex={"data":q}
+     return render(request,'inventario/proveedor/listar_proveedor.html',contex)
+
+def listar_cliente(request):
+     q=Clientes.objects.all()
+     contex={"data":q}
+     return render(request,'inventario/cliente/listar_cliente.html',contex)

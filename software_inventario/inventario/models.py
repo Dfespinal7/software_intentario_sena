@@ -1,6 +1,15 @@
 from django.db import models
 
 # Create your models here.
+
+
+def default_cliente():
+    return Clientes.objects.get_or_create(id=2)[0]
+
+def default_proveedor():
+    return Proveedores.objects.get_or_create(id=2)[0]
+
+
 class Clientes(models.Model):
     idCliente=models.BigAutoField(primary_key=True,blank=True)
     nombre=models.CharField(max_length=150)
@@ -27,8 +36,8 @@ class Productos(models.Model):
     idProducto=models.CharField(primary_key=True,blank=True,max_length=150)
     idCategoria=models.ForeignKey(Categorias,on_delete=models.CASCADE)
     nombreProducto=models.CharField(max_length=150)
-    unidadMedida=models.CharField(max_length=150)
-    stock=models.IntegerField(null=True) #el stock es el resultado de la resta de entradas y salidas, no confundir con cantidad de las otras tablas
+    unidadMedida=models.CharField(max_length=150,default="sin unidad de medida")
+    stock=models.IntegerField(null=True,default=0) #el stock es el resultado de la resta de entradas y salidas, no confundir con cantidad de las otras tablas
     
     def __str__(self):
         return f"{self.nombreProducto}"
@@ -37,10 +46,10 @@ class Entradas(models.Model):
     idEntrada=models.BigAutoField(primary_key=True,blank=True)
     idProveedor=models.ForeignKey(Proveedores,on_delete=models.CASCADE)
     idProducto=models.ForeignKey(Productos,on_delete=models.CASCADE)
-    unidadMedida=models.CharField(max_length=150)
-    observacion=models.CharField(max_length=150)
-    cantidadEntrada=models.IntegerField()
-    valorUnidad=models.DecimalField(max_digits=30,decimal_places=0)
+    unidadMedida=models.CharField(max_length=150,default=0)
+    observacion=models.CharField(max_length=150,default=0)
+    cantidadEntrada=models.IntegerField(default=0)
+    valorUnidad=models.DecimalField(max_digits=30,decimal_places=0,default=0)
 
     def __str__(self):
         return f"{self.cantidadEntrada}" #esto es una prueba
@@ -50,9 +59,9 @@ class Salidas(models.Model):
     idProducto=models.ForeignKey(Productos,on_delete=models.CASCADE)
     idCliente=models.ForeignKey(Clientes,on_delete=models.CASCADE)
     documento=models.CharField(max_length=150)  #viene del cliente
-    observacion=models.CharField(max_length=150)
-    cantidadSalida=models.IntegerField()
-    valorUnidad=models.IntegerField()
+    observacion=models.CharField(max_length=150,default="sin Observacion")
+    cantidadSalida=models.IntegerField(default=0)
+    valorUnidad=models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.cantidadSalida}"
@@ -64,9 +73,9 @@ class StockInventarios(models.Model):
     unidadMedida=models.CharField(max_length=150) #va el nombre del producto
     idEntrada=models.ForeignKey(Entradas,on_delete=models.CASCADE) #este corresponde a la cantidad de la entrada
     idSalida=models.ForeignKey(Salidas,on_delete=models.CASCADE) #este corresponde a la cantidad de la salida
-    stock=models.IntegerField() #resultado de la resta de entre la entrada y la salida
-    valorUnidad=models.DecimalField(max_digits=30,decimal_places=0) #puede venir de la tabla productos
-    valorInvenario=models.IntegerField() #es la multiplicacion entre el stock y valorUnidad
+    stock=models.IntegerField(default=0) #resultado de la resta de entre la entrada y la salida
+    valorUnidad=models.DecimalField(max_digits=30,decimal_places=0,default=0) #puede venir de la tabla productos
+    valorInvenario=models.IntegerField(default=0) #es la multiplicacion entre el stock y valorUnidad
 
 
 
