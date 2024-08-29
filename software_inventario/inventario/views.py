@@ -3,7 +3,7 @@ from .models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-
+#commit
 def inicio(request):
     return render(request,'inventario/inicio.html')
 
