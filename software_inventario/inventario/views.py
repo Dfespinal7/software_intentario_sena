@@ -33,6 +33,7 @@ def guardar_datos(request):
     if request.method=='POST':
         #Producto
         idProducto=request.POST.get("idProducto")
+        fecha=request.POST.get("fecha")
         idCategoria=Categorias.objects.get(pk=request.POST.get("idCategoria"))
         nombre=request.POST.get("nombreProducto")
         unidadMedi=request.POST.get("unidadMedida")
@@ -69,11 +70,11 @@ def guardar_datos(request):
         q.save()
         messages.success(request, "Producto creado correctamente")
         
-        k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=cantent,valorUnidad=valoruEntr)
+        k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=cantent,valorUnidad=valoruEntr,fechaEnt=fecha)
         k.save()
         messages.success(request, "Entrada Creada Correctamente")
 
-        s=Salidas(idProducto=q,idCliente=idCliente,documento=doc,observacion=obssal,cantidadSalida=cantsal,valorUnidad=valoruSal)
+        s=Salidas(idProducto=q,idCliente=idCliente,documento=doc,observacion=obssal,cantidadSalida=cantsal,valorUnidad=valoruSal,fechaSal=fecha)
         s.save()
         messages.success(request, "Salida Creada Correctamente")
         cat=q.idCategoria

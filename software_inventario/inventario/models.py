@@ -3,12 +3,6 @@ from django.db import models
 # Create your models here.
 
 
-def default_cliente():
-    return Clientes.objects.get_or_create(id=2)[0]
-
-def default_proveedor():
-    return Proveedores.objects.get_or_create(id=2)[0]
-
 
 class Clientes(models.Model):
     idCliente=models.BigAutoField(primary_key=True,blank=True)
@@ -28,6 +22,7 @@ class Categorias(models.Model):
 class Proveedores(models.Model):
     idProveedor=models.BigAutoField(primary_key=True,blank=True)
     nombre=models.CharField(max_length=150)
+    documento=models.CharField(max_length=150)
 
     def __str__(self):
         return f"{self.nombre}"
@@ -44,6 +39,7 @@ class Productos(models.Model):
 
 class Entradas(models.Model):
     idEntrada=models.BigAutoField(primary_key=True,blank=True)
+    fechaEnt=models.DateField()
     idProveedor=models.ForeignKey(Proveedores,on_delete=models.CASCADE)
     idProducto=models.ForeignKey(Productos,on_delete=models.CASCADE)
     unidadMedida=models.CharField(max_length=150,default=0)
@@ -56,6 +52,7 @@ class Entradas(models.Model):
 
 class Salidas(models.Model):
     idSalida=models.BigAutoField(primary_key=True,blank=True)
+    fechaSal=models.DateField()
     idProducto=models.ForeignKey(Productos,on_delete=models.CASCADE)
     idCliente=models.ForeignKey(Clientes,on_delete=models.CASCADE)
     documento=models.CharField(max_length=150)  #viene del cliente
