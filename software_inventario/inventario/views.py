@@ -109,4 +109,23 @@ def listar_categoria(request):
      return render(request,'inventario/categoria/listar_categoria.html',contex)
 
 def form_entradas(request):
-     pass
+     k=Productos.objects.all()
+     q=Proveedores.objects.all()
+     context={"productos":k,"proveedores":q}
+     return render(request,'inventario/entrada/form_entrada.html',context)
+
+def guardar_entrada(request):
+     if request.method=='POST':
+          fecha=request.POST.get("fechaEntrada")
+          producto=Productos.objects.get(pk=request.POST.get("producto"))
+          proveedor=Proveedores.objects.get(pk=request.POST.get("proveedor"))
+          unidad=request.POST.get("unidadMedida")
+          obs=request.POST.get("observacion")
+          cantent=request.POST.get("cantidadEntrada")
+          valoru=request.POST.get("valorUnidad")
+
+          ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,valorUnidad=valoru)
+          ent.save()
+          messages.success(request,"Entrada Crada correctamente")
+          
+          return HttpResponseRedirect(reverse('listar_entrada'))
