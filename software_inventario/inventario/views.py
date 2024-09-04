@@ -107,3 +107,6 @@ def listar_categoria(request):
      q=Categorias.objects.all()
      contex={"data":q}
      return render(request,'inventario/categoria/listar_categoria.html',contex)
+
+def form_entradas(request):
+     pass
