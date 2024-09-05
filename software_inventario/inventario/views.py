@@ -127,5 +127,11 @@ def guardar_entrada(request):
           ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,valorUnidad=valoru)
           ent.save()
           messages.success(request,"Entrada Crada correctamente")
-          
+          stock=StockInventarios.objects.filter(idProducto=producto)
+          print(stock)
+          for i in stock:
+               a=(i.idEntrada.cantidadEntrada)
+          result=(a+int(cantent))
+          q=StockInventarios.objects.get(pk=stock.idStockInventario)
+          print(q)
           return HttpResponseRedirect(reverse('listar_entrada'))
