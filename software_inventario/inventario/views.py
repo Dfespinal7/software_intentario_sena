@@ -81,7 +81,7 @@ def guardar_datos(request):
         unim=q.unidadMedida
         stock1=q.stock
         uni=k.valorUnidad
-        inv=StockInventarios(nombreCategoria=cat,idProducto=q,unidadMedida=unim,idEntrada=k,idSalida=s,stock=stock1,valorUnidad=uni,valorInvenario=valorinv)
+        inv=StockInventarios(nombreCategoria=cat,idProducto=q,unidadMedida=unim,totalEntrada=k.cantidadEntrada,totalSalida=s.cantidadSalida,stock=stock1,valorUnidad=uni,valorInvenario=valorinv)
         inv.save()
         messages.success(request, "Stock Creado Correctamente")
         
@@ -127,11 +127,12 @@ def guardar_entrada(request):
           ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,valorUnidad=valoru)
           ent.save()
           messages.success(request,"Entrada Crada correctamente")
-          stock=StockInventarios.objects.filter(idProducto=producto)
-          print(stock)
-          for i in stock:
-               a=(i.idEntrada.cantidadEntrada)
-          result=(a+int(cantent))
-          q=StockInventarios.objects.get(pk=stock.idStockInventario)
-          print(q)
+          stock=StockInventarios.objects.get(idProducto=producto)
+          valor=stock.valorUnidad
+          sum=stock.totalEntrada+int(cantent)
+          stock.totalEntrada=sum
+          stock.stock=sum-int(stock.totalSalida)
+          stock.valorInvenario=int(stock.stock)*int(valor)
+          stock.save()
+          
           return HttpResponseRedirect(reverse('listar_entrada'))

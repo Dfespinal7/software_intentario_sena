@@ -68,8 +68,8 @@ class StockInventarios(models.Model):
     nombreCategoria=models.CharField(max_length=150) #viene del producto
     idProducto=models.ForeignKey(Productos,on_delete=models.CASCADE) #va el nombre del producto
     unidadMedida=models.CharField(max_length=150) #va el nombre del producto
-    idEntrada=models.ForeignKey(Entradas,on_delete=models.CASCADE) #este corresponde a la cantidad de la entrada
-    idSalida=models.ForeignKey(Salidas,on_delete=models.CASCADE) #este corresponde a la cantidad de la salida
+    totalEntrada=models.IntegerField()
+    totalSalida=models.IntegerField()
     stock=models.IntegerField(default=0) #resultado de la resta de entre la entrada y la salida
     valorUnidad=models.DecimalField(max_digits=30,decimal_places=0,default=0) #puede venir de la tabla productos
     valorInvenario=models.IntegerField(default=0) #es la multiplicacion entre el stock y valorUnidad
