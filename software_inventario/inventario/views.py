@@ -165,6 +165,8 @@ def guardar_salida(request):
           s.stock=int(s.stock)-int(cantsal)
           s.valorInvenario=int(s.valorUnidad)*int(s.stock)
           s.save()
-          print(s.idProducto)
+          actstock=Productos.objects.get(idProducto=producto.idProducto)
+          actstock.stock=s.stock
+          actstock.save()
           messages.success(request,'Salida creada correctamente')
           return HttpResponseRedirect(reverse('listar_salida'))
