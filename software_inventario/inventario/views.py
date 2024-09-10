@@ -132,7 +132,39 @@ def guardar_entrada(request):
           sum=stock.totalEntrada+int(cantent)
           stock.totalEntrada=sum
           stock.stock=sum-int(stock.totalSalida)
-          stock.valorInvenario=int(stock.stock)*int(valor)
+          stock.valorUnidad=valoru
+          stock.valorInvenario=int(stock.valorInvenario)+(int(valoru)*int(cantent))
           stock.save()
+
+          actproduct=Productos.objects.get(idProducto=producto.idProducto)
+          actproduct.stock=stock.stock
+          actproduct.save()
           
           return HttpResponseRedirect(reverse('listar_entrada'))
+     
+def form_salida(request):
+     c=Clientes.objects.all()
+     p=Productos.objects.all()
+     contex={"clientes":c,"productos":p}
+     return render(request,'inventario/salida/form_salidas.html',contex)
+     
+def guardar_salida(request):
+     if request.method=='POST':
+          fecha=request.POST.get("fecha")
+          cliente=Clientes.objects.get(pk=request.POST.get("cliente"))
+          producto=Productos.objects.get(pk=request.POST.get("producto"))
+          obs=request.POST.get("observacion")
+          cantsal=request.POST.get("cantidadSalida")
+          valoru=request.POST.get("valorUnidad")
+
+          salida=Salidas(fechaSal=fecha,idProducto=producto,idCliente=cliente,documento=cliente.documento,observacion=obs,cantidadSalida=cantsal,valorUnidad=valoru)
+          salida.save()
+
+          s=StockInventarios.objects.get(idProducto=producto)
+          s.totalSalida=int(s.totalSalida)+int(cantsal)
+          s.stock=int(s.stock)-int(cantsal)
+          s.valorInvenario=int(s.valorUnidad)*int(s.stock)
+          s.save()
+          print(s.idProducto)
+          messages.success(request,'Salida creada correctamente')
+          return HttpResponseRedirect(reverse('listar_salida'))

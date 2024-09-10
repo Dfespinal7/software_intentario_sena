@@ -1,0 +1,55 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% block titul %}Inicio{% endblock %}
+{% block container %}
+<div class="bg-white p-4 m-4 border rounded">
+    <div class="container mt-2">
+        <h1 class="text-center mb-4">Formulario Salida</h1>
+        <div class="d-flex justify-content-center">
+            <div class="border p-4 rounded shadow-sm bg-light w-75">
+                <form action="{% url 'guardar_salida' %}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">Ingrese Fecha de la Salida</label>
+                        <input type="date" id="" name="fecha" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="" class="form-label">Cliente</label>
+                        <select name="cliente" id="" class="form-control">
+                            <option value="">Seleccione Cliente</option>
+                            {% for i in  clientes %}
+                                <option value="{{i.idCliente}}">{{i.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Producto</label>
+                        <select name="producto" id="" class="form-control">
+                            <option value="">Seleccione Producto</option>
+                            {% for i in productos %}
+                                <option value="{{i.idProducto}}">{{i.nombreProducto}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Observacion</label>
+                        <input type="" id="" name="observacion" class="form-control" placeholder="Ingrese Observacion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">cantidad de Salida</label>
+                        <input type="number" id="" name="cantidadSalida" class="form-control" placeholder="Ingrese Cantidad de Salida" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Ingrese Valor unidad</label>
+                        <input type="number" id="" name="valorUnidad" class="form-control" placeholder="Ingrese Valor unidad" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
