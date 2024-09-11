@@ -14,12 +14,15 @@ def listar_stock(request):
 
 def listar_entrada(request):
     k=Entradas.objects.all()
-    context={"data":k}
+    suma=0
+    for i in k:
+     suma=suma+i.valorUnidad
+    print(suma) 
+    context={"data":k,"suma":suma}
     return render(request,'inventario/entrada/listar_entrada.html',context)
 
 def listar_producto(request):
     k=Productos.objects.all()
-    context={"data":k}
     return render(request,'inventario/producto/listar_producto.html',context)
 
 def form_guardar(request):
