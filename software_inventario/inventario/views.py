@@ -163,7 +163,7 @@ def guardar_salida(request):
           s=StockInventarios.objects.get(idProducto=producto)
           s.totalSalida=int(s.totalSalida)+int(cantsal)
           s.stock=int(s.stock)-int(cantsal)
-          s.valorInvenario=int(s.valorInvenario)-(int(cantsal)*int(valoru))
+          s.valorInvenario=int(s.valorInvenario)-(int(cantsal)*int(valoru)) #va tocar crear un campo en la tabla salidas y int(s.valorInvenario)-(int(cantsal)*int(valor que creamos para la salida))
           s.save()
           actstock=Productos.objects.get(idProducto=producto.idProducto)
           actstock.stock=s.stock
