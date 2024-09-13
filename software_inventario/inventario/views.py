@@ -23,6 +23,7 @@ def listar_entrada(request):
 
 def listar_producto(request):
     k=Productos.objects.all()
+    context={"data":k}
     return render(request,'inventario/producto/listar_producto.html',context)
 
 def form_guardar(request):
@@ -167,7 +168,7 @@ def guardar_salida(request):
           s.totalSalida=int(s.totalSalida)+int(cantsal)
           s.stock=int(s.stock)-int(cantsal)
           s.valorInvenario=int(s.valorInvenario)-(int(cantsal)*int(valoru)) #va tocar crear un campo en la tabla salidas y int(s.valorInvenario)-(int(cantsal)*int(valor que creamos para la salida))
-          s.save()
+          s.save()                                                          #OTRA OPCION ES HACER UN PROMEDIO
           actstock=Productos.objects.get(idProducto=producto.idProducto)
           actstock.stock=s.stock
           actstock.save()
