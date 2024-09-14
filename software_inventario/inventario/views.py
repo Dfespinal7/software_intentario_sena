@@ -17,7 +17,7 @@ def listar_entrada(request):
     suma=0
     for i in k:
      suma=suma+i.valorUnidad
-    print(suma) 
+   
     context={"data":k,"suma":suma}
     return render(request,'inventario/entrada/listar_entrada.html',context)
 
@@ -139,13 +139,11 @@ def guardar_entrada(request):
                b=int(i.cantidadEntrada)*int(i.valorUnidad)
                sumatotalvalor=sumatotalvalor+int(b)
                sumacantidad=sumacantidad+int(i.cantidadEntrada)
-          print(f"la suma total de valor entrada es {sumatotalvalor} y la cantidad entradas fue {sumacantidad}")
           prom=int(sumatotalvalor)/int(sumacantidad)
-          print(f"el precio promedio es {prom}")
+          
           
           messages.success(request,"Entrada Crada correctamente")
           stock=StockInventarios.objects.get(idProducto=producto)
-          valor=stock.valorUnidad
           sum=stock.totalEntrada+int(cantent)
           stock.totalEntrada=sum
           stock.stock=sum-int(stock.totalSalida)
