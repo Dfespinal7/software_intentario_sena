@@ -130,13 +130,26 @@ def guardar_entrada(request):
 
           ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,valorUnidad=valoru)
           ent.save()
+
+          objs=Entradas.objects.filter(idProducto=producto)
+          sumacantidad=0
+          sumatotalvalor=0
+          for i in objs:
+               print(f"la multiplicacion de {i.cantidadEntrada} x {i.valorUnidad} es  {int(i.cantidadEntrada)*int(i.valorUnidad)}")
+               b=int(i.cantidadEntrada)*int(i.valorUnidad)
+               sumatotalvalor=sumatotalvalor+int(b)
+               sumacantidad=sumacantidad+int(i.cantidadEntrada)
+          print(f"la suma total de valor entrada es {sumatotalvalor} y la cantidad entradas fue {sumacantidad}")
+          prom=int(sumatotalvalor)/int(sumacantidad)
+          print(f"el precio promedio es {prom}")
+          
           messages.success(request,"Entrada Crada correctamente")
           stock=StockInventarios.objects.get(idProducto=producto)
           valor=stock.valorUnidad
           sum=stock.totalEntrada+int(cantent)
           stock.totalEntrada=sum
           stock.stock=sum-int(stock.totalSalida)
-          stock.valorUnidad=valoru
+          stock.valorUnidad=prom
           stock.valorInvenario=int(stock.valorInvenario)+(int(valoru)*int(cantent))
           stock.save()
 
@@ -167,11 +180,13 @@ def guardar_salida(request):
           s=StockInventarios.objects.get(idProducto=producto)
           s.totalSalida=int(s.totalSalida)+int(cantsal)
           s.stock=int(s.stock)-int(cantsal)
-          s.valorInvenario=int(s.valorInvenario)-(int(cantsal)*int(valoru)) #va tocar crear un campo en la tabla salidas y int(s.valorInvenario)-(int(cantsal)*int(valor que creamos para la salida))
+          s.valorInvenario=int(s.valorInvenario)-(int(cantsal)*int(s.valorUnidad)) #va tocar crear un campo en la tabla salidas y int(s.valorInvenario)-(int(cantsal)*int(valor que creamos para la salida))
           s.save()                                                          #OTRA OPCION ES HACER UN PROMEDIO
           actstock=Productos.objects.get(idProducto=producto.idProducto)
           actstock.stock=s.stock
           actstock.save()
+
+
           messages.success(request,'Salida creada correctamente')
           return HttpResponseRedirect(reverse('listar_salida'))
 
