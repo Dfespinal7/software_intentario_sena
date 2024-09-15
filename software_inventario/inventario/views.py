@@ -131,7 +131,7 @@ def guardar_entrada(request):
           ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,valorUnidad=valoru)
           ent.save()
 
-          objs=Entradas.objects.filter(idProducto=producto)
+          objs=Entradas.objects.filter(idProducto=producto) #aca me estoy trayendo todas las entradas de un producto en especifico
           sumacantidad=0
           sumatotalvalor=0
           for i in objs:
@@ -140,6 +140,11 @@ def guardar_entrada(request):
                sumatotalvalor=sumatotalvalor+int(b)
                sumacantidad=sumacantidad+int(i.cantidadEntrada)
           prom=int(sumatotalvalor)/int(sumacantidad)
+         
+          obsal=Salidas.objects.filter(idProducto=producto)
+          restcant=0
+          for i in obsal:
+               restcant=restcant+int(i.cantidadSalida)
           
           
           messages.success(request,"Entrada Crada correctamente")
@@ -149,8 +154,9 @@ def guardar_entrada(request):
           stock.stock=sum-int(stock.totalSalida)
           stock.valorUnidad=prom
           stock.valorInvenario=int(stock.valorInvenario)+(int(valoru)*int(cantent))
+          stock.valorUnidad=int(stock.valorInvenario)/int(stock.stock)
           stock.save()
-
+          
           actproduct=Productos.objects.get(idProducto=producto.idProducto)
           actproduct.stock=stock.stock
           actproduct.save()
@@ -179,7 +185,8 @@ def guardar_salida(request):
           s.totalSalida=int(s.totalSalida)+int(cantsal)
           s.stock=int(s.stock)-int(cantsal)
           s.valorInvenario=int(s.valorInvenario)-(int(cantsal)*int(s.valorUnidad)) #va tocar crear un campo en la tabla salidas y int(s.valorInvenario)-(int(cantsal)*int(valor que creamos para la salida))
-          s.save()                                                          #OTRA OPCION ES HACER UN PROMEDIO
+          s.valorUnidad=int(s.valorInvenario)/int(s.stock)
+          s.save()                                                          
           actstock=Productos.objects.get(idProducto=producto.idProducto)
           actstock.stock=s.stock
           actstock.save()
