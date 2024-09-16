@@ -175,18 +175,39 @@ def guardar_salida(request):
           cliente=Clientes.objects.get(pk=request.POST.get("cliente"))
           producto=Productos.objects.get(pk=request.POST.get("producto"))
           obs=request.POST.get("observacion")
-          cantsal=request.POST.get("cantidadSalida")
+          cantsal=int(request.POST.get("cantidadSalida"))
           valoru=request.POST.get("valorUnidad")
 
           salida=Salidas(fechaSal=fecha,idProducto=producto,idCliente=cliente,documento=cliente.documento,observacion=obs,cantidadSalida=cantsal,valorUnidad=valoru)
           salida.save()
 
+          ent=Entradas.objects.filter(idProducto=producto)
+          cantidad_a_saldar = cantsal
+          valor_total_salida=0
+          for i in ent:
+               if cantidad_a_saldar<=0:
+                    break
+               cantidad_disponible=int(i.cantidadEntrada)
+               valor_unitario=int(i.valorUnidad)
+               if cantidad_disponible<=cantidad_a_saldar:
+                    valor_total_salida=valor_total_salida+cantidad_disponible*valor_unitario
+                    cantidad_a_saldar=cantidad_a_saldar-cantidad_disponible
+               else:
+                # Usar solo parte de la entrada
+                valor_total_salida += cantidad_a_saldar * valor_unitario
+                i.cantidadEntrada = cantidad_disponible - cantidad_a_saldar
+                i.save()
+                cantidad_a_saldar = 0
+
+         
+
           s=StockInventarios.objects.get(idProducto=producto)
           s.totalSalida=int(s.totalSalida)+int(cantsal)
           s.stock=int(s.stock)-int(cantsal)
-          s.valorInvenario=int(s.valorInvenario)-(int(cantsal)*int(s.valorUnidad)) #va tocar crear un campo en la tabla salidas y int(s.valorInvenario)-(int(cantsal)*int(valor que creamos para la salida))
+          s.valorInvenario=int(s.valorInvenario)-valor_total_salida #va tocar crear un campo en la tabla salidas y int(s.valorInvenario)-(int(cantsal)*int(valor que creamos para la salida))
           s.valorUnidad=int(s.valorInvenario)/int(s.stock)
-          s.save()                                                          
+          s.save()    
+                                                                 
           actstock=Productos.objects.get(idProducto=producto.idProducto)
           actstock.stock=s.stock
           actstock.save()
