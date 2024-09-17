@@ -16,7 +16,7 @@ def listar_entrada(request):
     k=Entradas.objects.all()
     suma=0
     for i in k:
-     suma=suma+i.valorUnidad
+     suma=suma+i.valorUnidad*i.cantEntInicial
    
     context={"data":k,"suma":suma}
     return render(request,'inventario/entrada/listar_entrada.html',context)
