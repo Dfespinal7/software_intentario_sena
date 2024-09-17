@@ -74,7 +74,7 @@ def guardar_datos(request):
         q.save()
         messages.success(request, "Producto creado correctamente")
         
-        k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=cantent,valorUnidad=valoruEntr,fechaEnt=fecha)
+        k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoruEntr,fechaEnt=fecha)
         k.save()
         messages.success(request, "Entrada Creada Correctamente")
 
@@ -128,7 +128,7 @@ def guardar_entrada(request):
           cantent=request.POST.get("cantidadEntrada")
           valoru=request.POST.get("valorUnidad")
 
-          ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,valorUnidad=valoru)
+          ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoru)
           ent.save()
 
           objs=Entradas.objects.filter(idProducto=producto) #aca me estoy trayendo todas las entradas de un producto en especifico

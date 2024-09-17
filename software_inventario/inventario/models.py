@@ -44,6 +44,7 @@ class Entradas(models.Model):
     idProducto=models.ForeignKey(Productos,on_delete=models.CASCADE)
     unidadMedida=models.CharField(max_length=150,default=0)
     observacion=models.CharField(max_length=150,default=0)
+    cantEntInicial=models.IntegerField(default=0)
     cantidadEntrada=models.IntegerField(default=0)
     valorUnidad=models.DecimalField(max_digits=30,decimal_places=0,default=0)
 
