@@ -192,12 +192,14 @@ def guardar_salida(request):
                if cantidad_disponible<=cantidad_a_saldar:
                     valor_total_salida=valor_total_salida+cantidad_disponible*valor_unitario
                     cantidad_a_saldar=cantidad_a_saldar-cantidad_disponible
+                    i.cantidadEntrada = 0  
                else:
                 # Usar solo parte de la entrada
                 valor_total_salida += cantidad_a_saldar * valor_unitario
                 i.cantidadEntrada = cantidad_disponible - cantidad_a_saldar
                 i.save()
                 cantidad_a_saldar = 0
+               i.save()
 
          
 
