@@ -35,6 +35,8 @@ def form_guardar(request):
 
 def guardar_datos(request):
     if request.method=='POST':
+        k = None  # Entradas
+        s = None  # Salidas
         #Producto
         idProducto=request.POST.get("idProducto")
         fecha=request.POST.get("fecha")
@@ -73,19 +75,26 @@ def guardar_datos(request):
         q=Productos(idProducto=idProducto,idCategoria=idCategoria,nombreProducto=nombre,unidadMedida=unidadMedi,stock=stock)
         q.save()
         messages.success(request, "Producto creado correctamente")
-        
-        k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoruEntr,fechaEnt=fecha)
-        k.save()
-        messages.success(request, "Entrada Creada Correctamente")
-
-        s=Salidas(idProducto=q,idCliente=idCliente,documento=doc,observacion=obssal,cantidadSalida=cantsal,valorUnidad=valoruSal,fechaSal=fecha)
-        s.save()
-        messages.success(request, "Salida Creada Correctamente")
+        if int(cantent)>0:
+          k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoruEntr,fechaEnt=fecha)
+          k.save()
+          messages.success(request, "Entrada Creada Correctamente")
+        else:
+            pass  
+        if int(cantsal)>0:    
+          s=Salidas(idProducto=q,idCliente=idCliente,documento=doc,observacion=obssal,cantidadSalida=cantsal,valorUnidad=valoruSal,fechaSal=fecha)
+          s.save()
+          messages.success(request, "Salida Creada Correctamente")
+        else:
+            pass
         cat=q.idCategoria
         unim=q.unidadMedida
         stock1=q.stock
-        uni=k.valorUnidad
-        inv=StockInventarios(nombreCategoria=cat,idProducto=q,unidadMedida=unim,totalEntrada=k.cantidadEntrada,totalSalida=s.cantidadSalida,stock=stock1,valorUnidad=uni,valorInvenario=valorinv)
+        if k:
+            uni=k.valorUnidad
+        else:
+            uni=0       
+        inv=StockInventarios(nombreCategoria=cat,idProducto=q,unidadMedida=unim,totalEntrada=k.cantidadEntrada if k else 0,totalSalida=s.cantidadSalida if s else 0,stock=stock1,valorUnidad=uni,valorInvenario=valorinv)
         inv.save()
         messages.success(request, "Stock Creado Correctamente")
         
