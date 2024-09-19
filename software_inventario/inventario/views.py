@@ -137,6 +137,7 @@ def guardar_entrada(request):
           obs=request.POST.get("observacion")
           cantent=request.POST.get("cantidadEntrada")
           valoru=request.POST.get("valorUnidad")
+          cantEntActual=request.POST.get("cantEntActual")
           if idEntrada=='':
                ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoru)
                ent.save()
@@ -180,9 +181,9 @@ def guardar_entrada(request):
                e.unidadMedida=unidad
                e.observacion=obs
                e.cantEntInicial=cantent
-               e.cantidadEntrada=cantent
+               e.cantidadEntrada=cantEntActual
                e.valorUnidad=valoru
-               e.save()
+               e.save()  
 
                objs=Entradas.objects.filter(idProducto=producto) #aca me estoy trayendo todas las entradas de un producto en especifico
                sumacantidad=0
