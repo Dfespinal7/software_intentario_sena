@@ -129,6 +129,7 @@ def form_entradas(request):
 
 def guardar_entrada(request):
      if request.method=='POST':
+          idEntrada=request.POST.get("idEntrada")
           fecha=request.POST.get("fechaEntrada")
           producto=Productos.objects.get(pk=request.POST.get("producto"))
           proveedor=Proveedores.objects.get(pk=request.POST.get("proveedor"))
@@ -136,41 +137,96 @@ def guardar_entrada(request):
           obs=request.POST.get("observacion")
           cantent=request.POST.get("cantidadEntrada")
           valoru=request.POST.get("valorUnidad")
+          if idEntrada=='':
+               ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoru)
+               ent.save()
 
-          ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoru)
-          ent.save()
+               objs=Entradas.objects.filter(idProducto=producto) #aca me estoy trayendo todas las entradas de un producto en especifico
+               sumacantidad=0
+               sumatotalvalor=0
+               for i in objs:
+                    
+                    b=int(i.cantidadEntrada)*int(i.valorUnidad)
+                    sumatotalvalor=sumatotalvalor+int(b)
+                    sumacantidad=sumacantidad+int(i.cantidadEntrada)
+               prom=int(sumatotalvalor)/int(sumacantidad)
+          
+               obsal=Salidas.objects.filter(idProducto=producto)
+               restcant=0
+               for i in obsal:
+                    restcant=restcant+int(i.cantidadSalida)
+               
+               
+               messages.success(request,"Entrada Crada correctamente")
+               stock=StockInventarios.objects.get(idProducto=producto)
+               sum=stock.totalEntrada+int(cantent)
+               stock.totalEntrada=sum
+               stock.stock=sum-int(stock.totalSalida)
+               stock.valorUnidad=prom
+               stock.valorInvenario=int(stock.valorInvenario)+(int(valoru)*int(cantent))
+               stock.valorUnidad=int(stock.valorInvenario)/int(stock.stock)
+               stock.save()
+               
+               actproduct=Productos.objects.get(idProducto=producto.idProducto)
+               actproduct.stock=stock.stock
+               actproduct.save()
+               
+               return HttpResponseRedirect(reverse('listar_entrada'))
+          else:
+               e=Entradas.objects.get(pk=idEntrada)
+               e.fechaEnt=fecha
+               e.idProveedor=proveedor
+               e.idProducto=producto
+               e.unidadMedida=unidad
+               e.observacion=obs
+               e.cantEntInicial=cantent
+               e.cantidadEntrada=cantent
+               e.valorUnidad=valoru
+               e.save()
 
-          objs=Entradas.objects.filter(idProducto=producto) #aca me estoy trayendo todas las entradas de un producto en especifico
-          sumacantidad=0
-          sumatotalvalor=0
-          for i in objs:
-               print(f"la multiplicacion de {i.cantidadEntrada} x {i.valorUnidad} es  {int(i.cantidadEntrada)*int(i.valorUnidad)}")
-               b=int(i.cantidadEntrada)*int(i.valorUnidad)
-               sumatotalvalor=sumatotalvalor+int(b)
-               sumacantidad=sumacantidad+int(i.cantidadEntrada)
-          prom=int(sumatotalvalor)/int(sumacantidad)
-         
-          obsal=Salidas.objects.filter(idProducto=producto)
-          restcant=0
-          for i in obsal:
-               restcant=restcant+int(i.cantidadSalida)
+               objs=Entradas.objects.filter(idProducto=producto) #aca me estoy trayendo todas las entradas de un producto en especifico
+               sumacantidad=0
+               sumatotalvalor=0
+               for i in objs:
+                    
+                    b=int(i.cantidadEntrada)*int(i.valorUnidad)
+                    sumatotalvalor=sumatotalvalor+int(b)
+                    sumacantidad=sumacantidad+int(i.cantidadEntrada)
+               prom=int(sumatotalvalor)/int(sumacantidad)
           
-          
-          messages.success(request,"Entrada Crada correctamente")
-          stock=StockInventarios.objects.get(idProducto=producto)
-          sum=stock.totalEntrada+int(cantent)
-          stock.totalEntrada=sum
-          stock.stock=sum-int(stock.totalSalida)
-          stock.valorUnidad=prom
-          stock.valorInvenario=int(stock.valorInvenario)+(int(valoru)*int(cantent))
-          stock.valorUnidad=int(stock.valorInvenario)/int(stock.stock)
-          stock.save()
-          
-          actproduct=Productos.objects.get(idProducto=producto.idProducto)
-          actproduct.stock=stock.stock
-          actproduct.save()
-          
-          return HttpResponseRedirect(reverse('listar_entrada'))
+               obsal=Salidas.objects.filter(idProducto=producto)
+               restcant=0
+               for i in obsal:
+                    restcant=restcant+int(i.cantidadSalida)
+               
+               
+               messages.success(request,"Entrada Crada correctamente")
+               stock=StockInventarios.objects.get(idProducto=producto)
+               entra=Entradas.objects.filter(idProducto=producto)
+               totalent=0
+               valorinv=0
+               for i in entra:
+                   totalent=totalent+int(i.cantEntInicial)
+                   valorinv=valorinv+int(i.cantidadEntrada)*int(i.valorUnidad)
+                   print(valorinv)
+               
+
+               stock.totalEntrada=totalent
+               stock.valorInvenario=valorinv
+               stock.stock=int(stock.totalEntrada)-int(stock.totalSalida)
+               stock.valorUnidad=int(stock.valorInvenario)/int(stock.stock)
+               stock.save()
+
+               
+               actproduct=Productos.objects.get(idProducto=producto.idProducto)
+               actproduct.stock=stock.stock
+               actproduct.save()
+               
+               return HttpResponseRedirect(reverse('listar_entrada'))
+
+
+              
+              
      
 def form_salida(request):
      c=Clientes.objects.all()
@@ -227,5 +283,9 @@ def guardar_salida(request):
           messages.success(request,'Salida creada correctamente')
           return HttpResponseRedirect(reverse('listar_salida'))
 
-def editar_salida(request):
-     pass
+def editar_entrada(request,idEntrada):
+     k=Entradas.objects.get(pk=idEntrada)
+     p=Proveedores.objects.all()
+     pro=Productos.objects.all()
+     context={"data":k,"idEntrada":idEntrada,"proveedores":p,"productos":pro}
+     return render(request,'inventario/entrada/form_entrada.html',context)

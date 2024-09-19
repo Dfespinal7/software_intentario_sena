@@ -15,4 +15,5 @@ urlpatterns = [
     path('guardar_entrada',guardar_entrada,name="guardar_entrada"),
     path('form_salida',form_salida,name="form_salida"),
     path('guardar_salida',guardar_salida,name="guardar_salida"),
+    path('editar_entrada<int:idEntrada>',editar_entrada,name="editar_entrada"),
 ]
