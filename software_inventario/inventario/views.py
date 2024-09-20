@@ -142,20 +142,8 @@ def guardar_entrada(request):
                ent=Entradas(fechaEnt=fecha,idProveedor=proveedor,idProducto=producto,unidadMedida=unidad,observacion=obs,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoru)
                ent.save()
 
-               objs=Entradas.objects.filter(idProducto=producto) #aca me estoy trayendo todas las entradas de un producto en especifico
-               sumacantidad=0
-               sumatotalvalor=0
-               for i in objs:
-                    
-                    b=int(i.cantidadEntrada)*int(i.valorUnidad)
-                    sumatotalvalor=sumatotalvalor+int(b)
-                    sumacantidad=sumacantidad+int(i.cantidadEntrada)
-               prom=int(sumatotalvalor)/int(sumacantidad)
+              
           
-               obsal=Salidas.objects.filter(idProducto=producto)
-               restcant=0
-               for i in obsal:
-                    restcant=restcant+int(i.cantidadSalida)
                
                
                messages.success(request,"Entrada Crada correctamente")
@@ -163,7 +151,7 @@ def guardar_entrada(request):
                sum=stock.totalEntrada+int(cantent)
                stock.totalEntrada=sum
                stock.stock=sum-int(stock.totalSalida)
-               stock.valorUnidad=prom
+               
                stock.valorInvenario=int(stock.valorInvenario)+(int(valoru)*int(cantent))
                stock.valorUnidad=int(stock.valorInvenario)/int(stock.stock)
                stock.save()
@@ -185,21 +173,11 @@ def guardar_entrada(request):
                e.valorUnidad=valoru
                e.save()  
 
-               objs=Entradas.objects.filter(idProducto=producto) #aca me estoy trayendo todas las entradas de un producto en especifico
-               sumacantidad=0
-               sumatotalvalor=0
-               for i in objs:
-                    
-                    b=int(i.cantidadEntrada)*int(i.valorUnidad)
-                    sumatotalvalor=sumatotalvalor+int(b)
-                    sumacantidad=sumacantidad+int(i.cantidadEntrada)
-               prom=int(sumatotalvalor)/int(sumacantidad)
-          
-               obsal=Salidas.objects.filter(idProducto=producto)
-               restcant=0
-               for i in obsal:
-                    restcant=restcant+int(i.cantidadSalida)
-               
+               sal=Salidas.objects.filter(idProducto=producto)
+               totalsal=0
+               for i in sal:
+                   totalsal=totalsal+int(i.totalValorSal)
+               print(totalsal)
                
                messages.success(request,"Entrada Crada correctamente")
                stock=StockInventarios.objects.get(idProducto=producto)
@@ -208,12 +186,12 @@ def guardar_entrada(request):
                valorinv=0
                for i in entra:
                    totalent=totalent+int(i.cantEntInicial)
-                   valorinv=valorinv+int(i.cantidadEntrada)*int(i.valorUnidad)
+                   valorinv=valorinv+int(i.cantEntInicial)*int(i.valorUnidad)
                    print(valorinv)
                
 
                stock.totalEntrada=totalent
-               stock.valorInvenario=valorinv
+               stock.valorInvenario=valorinv-totalsal
                stock.stock=int(stock.totalEntrada)-int(stock.totalSalida)
                stock.valorUnidad=int(stock.valorInvenario)/int(stock.stock)
                stock.save()
@@ -244,8 +222,7 @@ def guardar_salida(request):
           cantsal=int(request.POST.get("cantidadSalida"))
           valoru=request.POST.get("valorUnidad")
 
-          salida=Salidas(fechaSal=fecha,idProducto=producto,idCliente=cliente,documento=cliente.documento,observacion=obs,cantidadSalida=cantsal,valorUnidad=valoru)
-          salida.save()
+          
 
           ent=Entradas.objects.filter(idProducto=producto)
           cantidad_a_saldar = cantsal
@@ -267,7 +244,9 @@ def guardar_salida(request):
                 cantidad_a_saldar = 0
                i.save()
 
-         
+          salida=Salidas(fechaSal=fecha,idProducto=producto,idCliente=cliente,documento=cliente.documento,observacion=obs,cantidadSalida=cantsal,valorUnidad=valoru,totalValorSal=valor_total_salida)
+          salida.save()
+          print(salida.totalValorSal)
 
           s=StockInventarios.objects.get(idProducto=producto)
           s.totalSalida=int(s.totalSalida)+int(cantsal)

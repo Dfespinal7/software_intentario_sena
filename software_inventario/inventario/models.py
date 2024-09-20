@@ -60,6 +60,7 @@ class Salidas(models.Model):
     observacion=models.CharField(max_length=150,default="sin Observacion")
     cantidadSalida=models.IntegerField(default=0)
     valorUnidad=models.IntegerField(default=0)
+    totalValorSal=models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.cantidadSalida}"
