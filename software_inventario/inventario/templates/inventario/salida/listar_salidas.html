@@ -5,9 +5,10 @@
 {% block container %}
 <div class="bg-white p-4 m-4 border rounded">
     <h1 class="text-center">Salidas</h1>
-    <form class="d-flex mb-2" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+    <form class="d-flex mb-2" role="search" method="post" action="{% url 'buscar_salida' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Ingrese nombre del Producto" aria-label="Search" name="producto">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
       </form>
     <a href="{% url 'form_salida' %}" class="btn btn-success mb-2">Añadir Salida</a>
     <table class="table table-bordered">

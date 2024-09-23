@@ -457,3 +457,17 @@ def buscar_entrada(request):
             suma=suma+i.cantEntInicial*i.valorUnidad
         context={"data":k,"prod":prod,"suma":suma}
         return render(request,'inventario/entrada/listar_entrada.html',context)
+
+def buscar_salida(request):
+    if request.method=='POST':
+        prod=request.POST.get("producto")
+        p=Salidas.objects.filter(idProducto__nombreProducto__icontains=prod)
+        contex={"data":p,"prod":prod}
+        return render(request,'inventario/salida/listar_salidas.html',contex)
+    
+def buscar_stock(request):
+    if request.method=='POST':
+        pro=request.POST.get("producto")
+        k=StockInventarios.objects.filter(idProducto__nombreProducto__icontains=pro)
+        context={"data":k,"pro":pro}
+        return render(request,'inventario/stock/stock_inventario.html',context)

@@ -24,4 +24,6 @@ urlpatterns = [
     path('buscar_producto',buscar_producto,name="buscar_producto"),
     path('eliminar_producto<slug:idProducto>',eliminar_producto,name="eliminar_producto"),
     path('buscar_entrada',buscar_entrada,name="buscar_entrada"),
+    path('buscar_salida',buscar_salida,name="buscar_salida"),
+    path('buscar_stock',buscar_stock,name="buscar_stock"),
 ]

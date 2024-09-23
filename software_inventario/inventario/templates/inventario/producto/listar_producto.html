@@ -8,7 +8,7 @@
     </div>
     <form class="d-flex mb-2" role="search" method="post" action="{% url 'buscar_producto' %}">
         {% csrf_token %}
-        <input class="form-control me-2" type="search" placeholder="Buscar nombre del Producto" name="producto" aria-label="Search">
+        <input class="form-control me-2" type="search" placeholder="Ingrese nombre del Producto" name="producto" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Buscar</button>
       </form>
     <a href="{% url 'form_guardar' %}" class="btn btn-success mb-2">Añadir Producto</a>
