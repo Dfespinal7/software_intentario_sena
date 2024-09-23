@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -214,54 +214,117 @@ def form_salida(request):
      return render(request,'inventario/salida/form_salidas.html',contex)
      
 def guardar_salida(request):
-     if request.method=='POST':
-          fecha=request.POST.get("fecha")
-          cliente=Clientes.objects.get(pk=request.POST.get("cliente"))
-          producto=Productos.objects.get(pk=request.POST.get("producto"))
-          obs=request.POST.get("observacion")
-          cantsal=int(request.POST.get("cantidadSalida"))
-          valoru=request.POST.get("valorUnidad")
+    if request.method == 'POST':
+        idSalida = request.POST.get("idSalida")
+        fecha = request.POST.get("fecha")
+        cliente = Clientes.objects.get(pk=request.POST.get("cliente"))
+        producto = Productos.objects.get(pk=request.POST.get("producto"))
+        obs = request.POST.get("observacion")
+        cantsal = int(request.POST.get("cantidadSalida"))
+        valoru = int(request.POST.get("valorUnidad"))
+        nueva_cantidad_salida = cantsal
 
-          
+        # Obtener el stock del producto
+        s = StockInventarios.objects.get(idProducto=producto)
 
-          ent=Entradas.objects.filter(idProducto=producto)
-          cantidad_a_saldar = cantsal
-          valor_total_salida=0
-          for i in ent:
-               if cantidad_a_saldar<=0:
-                    break
-               cantidad_disponible=int(i.cantidadEntrada)
-               valor_unitario=int(i.valorUnidad)
-               if cantidad_disponible<=cantidad_a_saldar:
-                    valor_total_salida=valor_total_salida+cantidad_disponible*valor_unitario
-                    cantidad_a_saldar=cantidad_a_saldar-cantidad_disponible
-                    i.cantidadEntrada = 0  
-               else:
-                # Usar solo parte de la entrada
+        # Calcular la cantidad y el valor de la salida
+        ent = Entradas.objects.filter(idProducto=producto).order_by('fechaEnt')
+        cantidad_a_saldar = cantsal
+        valor_total_salida = 0
+
+        # Si es una edición de una salida existente
+        if idSalida:
+            try:
+                # Obtener la salida original para comparar
+                salida_original = Salidas.objects.get(pk=idSalida)
+                cantidad_salida_anterior = salida_original.cantidadSalida
+
+                # Restaurar el inventario original (revertir la salida previa)
+                s.totalSalida -= cantidad_salida_anterior  # Devolver las unidades de salida previas
+                s.stock += cantidad_salida_anterior  # Aumentar el stock nuevamente
+                valor_total_salida_anterior = salida_original.totalValorSal
+                s.valorInvenario += valor_total_salida_anterior  # Aumentar el valor del inventario nuevamente
+                s.valorUnidad = s.valorInvenario / s.stock if s.stock > 0 else 0
+                s.save()
+
+                # Restaurar las cantidades en las entradas
+                cantidad_a_restaurar = cantidad_salida_anterior
+                for entrada in ent:
+                    if cantidad_a_restaurar <= 0:
+                        break
+                    cantidad_usada = entrada.cantEntInicial - entrada.cantidadEntrada
+                    cantidad_a_restituir = min(cantidad_a_restaurar, cantidad_usada)
+                    entrada.cantidadEntrada += cantidad_a_restituir
+                    cantidad_a_restaurar -= cantidad_a_restituir
+                    entrada.save()
+
+            except Exception as e:
+                messages.error(request, f"Error al restaurar la salida anterior: {str(e)}")
+                return redirect('formulario_salida')
+
+        # Aplicar la nueva salida
+        cantidad_a_saldar = nueva_cantidad_salida
+        for entrada in ent:
+            if cantidad_a_saldar <= 0:
+                break
+            cantidad_disponible = int(entrada.cantidadEntrada)
+            valor_unitario = int(entrada.valorUnidad)
+
+            if cantidad_disponible <= cantidad_a_saldar:
+                valor_total_salida += cantidad_disponible * valor_unitario
+                cantidad_a_saldar -= cantidad_disponible
+                entrada.cantidadEntrada = 0  # Marcar esta entrada como completamente usada
+            else:
                 valor_total_salida += cantidad_a_saldar * valor_unitario
-                i.cantidadEntrada = cantidad_disponible - cantidad_a_saldar
-                i.save()
+                entrada.cantidadEntrada -= cantidad_a_saldar
                 cantidad_a_saldar = 0
-               i.save()
+            entrada.save()
 
-          salida=Salidas(fechaSal=fecha,idProducto=producto,idCliente=cliente,documento=cliente.documento,observacion=obs,cantidadSalida=cantsal,valorUnidad=valoru,totalValorSal=valor_total_salida)
-          salida.save()
-          print(salida.totalValorSal)
+        # Actualizar o crear la salida
+        if idSalida == '':
+            salida = Salidas(
+                fechaSal=fecha,
+                idProducto=producto,
+                idCliente=cliente,
+                documento=cliente.documento,
+                observacion=obs,
+                cantidadSalida=nueva_cantidad_salida,
+                valorUnidad=valoru,
+                totalValorSal=valor_total_salida
+            )
+            salida.save()
+        else:
+            salida_original.fechaSal = fecha
+            salida_original.idCliente = cliente
+            salida_original.idProducto = producto
+            salida_original.documento = cliente.documento
+            salida_original.observacion = obs
+            salida_original.cantidadSalida = nueva_cantidad_salida
+            salida_original.valorUnidad = valoru
+            salida_original.totalValorSal = valor_total_salida
+            salida_original.save()
 
-          s=StockInventarios.objects.get(idProducto=producto)
-          s.totalSalida=int(s.totalSalida)+int(cantsal)
-          s.stock=int(s.stock)-int(cantsal)
-          s.valorInvenario=int(s.valorInvenario)-valor_total_salida #va tocar crear un campo en la tabla salidas y int(s.valorInvenario)-(int(cantsal)*int(valor que creamos para la salida))
-          s.valorUnidad=int(s.valorInvenario)/int(s.stock)
-          s.save()    
-                                                                 
-          actstock=Productos.objects.get(idProducto=producto.idProducto)
-          actstock.stock=s.stock
-          actstock.save()
+        # Actualizar el inventario
+        s.totalSalida += nueva_cantidad_salida
+        s.stock -= nueva_cantidad_salida
+        s.valorInvenario -= valor_total_salida
+        s.valorUnidad = s.valorInvenario / s.stock if s.stock > 0 else 0
+        s.save()
+
+        # Actualizar el stock en Productos
+        producto.stock = s.stock
+        producto.save()
+
+        messages.success(request, 'Salida editada correctamente' if idSalida else 'Salida creada correctamente')
+        return HttpResponseRedirect(reverse('listar_salida'))
+
+    return HttpResponseRedirect(reverse('listar_salida'))
 
 
-          messages.success(request,'Salida creada correctamente')
-          return HttpResponseRedirect(reverse('listar_salida'))
+
+
+
+   
 
 def editar_entrada(request,idEntrada):
      k=Entradas.objects.get(pk=idEntrada)
@@ -269,3 +332,82 @@ def editar_entrada(request,idEntrada):
      pro=Productos.objects.all()
      context={"data":k,"idEntrada":idEntrada,"proveedores":p,"productos":pro}
      return render(request,'inventario/entrada/form_entrada.html',context)
+
+
+def editar_salida(request,idSalida):
+    c=Clientes.objects.all()
+    p=Productos.objects.all()
+    s=Salidas.objects.get(pk=idSalida)
+    context={"idSalida":idSalida,"clientes":c,"productos":p,"data":s}
+    return render(request,'inventario/salida/form_salidas.html',context)
+
+
+def eliminar_entrada(request, idEntrada):
+    try:
+        entrada = Entradas.objects.get(pk=idEntrada)
+        producto = entrada.idProducto
+
+        # Actualizar el stock antes de eliminar la entrada
+        stock = StockInventarios.objects.get(idProducto=producto)
+        stock.totalEntrada -= entrada.cantidadEntrada
+        stock.valorInvenario -= entrada.cantidadEntrada * entrada.valorUnidad
+        stock.stock = stock.totalEntrada - stock.totalSalida
+        stock.valorUnidad = stock.valorInvenario / stock.stock if stock.stock > 0 else 0
+        stock.save()
+
+        # Eliminar la entrada
+        entrada.delete()
+
+        # Actualizar el stock del producto
+        producto.stock = stock.stock
+        producto.save()
+
+        messages.success(request, 'Entrada eliminada correctamente')
+    except Entradas.DoesNotExist:
+        messages.error(request, 'Entrada no encontrada')
+    except Exception as e:
+        messages.error(request, f'Error al eliminar la entrada: {str(e)}')
+
+    return HttpResponseRedirect(reverse('listar_entrada'))
+
+
+def eliminar_salida(request, idSalida):
+    try:
+        salida = Salidas.objects.get(pk=idSalida)
+        producto = salida.idProducto
+
+        # Obtener el stock del producto
+        stock = StockInventarios.objects.get(idProducto=producto)
+
+        # Restaurar el inventario original
+        stock.totalSalida -= salida.cantidadSalida
+        stock.stock += salida.cantidadSalida
+        stock.valorInvenario += salida.totalValorSal
+        stock.valorUnidad = stock.valorInvenario / stock.stock if stock.stock > 0 else 0
+        stock.save()
+
+        # Restaurar las cantidades en las entradas
+        entradas = Entradas.objects.filter(idProducto=producto).order_by('fechaEnt')
+        cantidad_a_restaurar = salida.cantidadSalida
+        for entrada in entradas:
+            if cantidad_a_restaurar <= 0:
+                break
+            cantidad_usada = entrada.cantEntInicial - entrada.cantidadEntrada
+            cantidad_a_restituir = min(cantidad_a_restaurar, cantidad_usada)
+            entrada.cantidadEntrada += cantidad_a_restituir
+            cantidad_a_restaurar -= cantidad_a_restituir
+            entrada.save()
+
+        # Eliminar la salida
+        salida.delete()
+
+        messages.success(request, 'Salida eliminada correctamente')
+    except Salidas.DoesNotExist:
+        messages.error(request, 'Salida no encontrada')
+    except Exception as e:
+        messages.error(request, f'Error al eliminar la salida: {str(e)}')
+
+    return HttpResponseRedirect(reverse('listar_salida'))
+
+def form_edit_product(request):
+    return render(request,'inventario/producto/edit_product.html')

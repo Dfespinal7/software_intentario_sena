@@ -1,6 +1,6 @@
 {% extends 'inventario/base.html' %}
 {% load static %}
-{% block titul %}Inicio{% endblock %}
+{% block titul %}Formulario Salidas{% endblock %}
 {% block container %}
 <div class="bg-white p-4 m-4 border rounded">
     <div class="container mt-2">
@@ -9,9 +9,10 @@
             <div class="border p-4 rounded shadow-sm bg-light w-75">
                 <form action="{% url 'guardar_salida' %}" method="post">
                     {% csrf_token %}
+                    <input type="hidden" id="" name="idSalida" value="{{idSalida}}" class="form-control" >
                     <div class="mb-3">
                         <label for="" class="form-label">Ingrese Fecha de la Salida</label>
-                        <input type="date" id="" name="fecha" class="form-control" required>
+                        <input type="date" id="" name="fecha" class="form-control" value="{{data.fechaSal|date:'Y-m-d'}}" required>
                     </div>
                     
                     <div class="mb-3">
@@ -19,7 +20,7 @@
                         <select name="cliente" id="" class="form-control">
                             <option value="">Seleccione Cliente</option>
                             {% for i in  clientes %}
-                                <option value="{{i.idCliente}}">{{i.nombre}}</option>
+                                <option value="{{i.idCliente}}"{% if data.idCliente.idCliente == i.idCliente %}selected{% endif %}>{{i.nombre}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -28,25 +29,31 @@
                         <select name="producto" id="" class="form-control">
                             <option value="">Seleccione Producto</option>
                             {% for i in productos %}
-                                <option value="{{i.idProducto}}">{{i.nombreProducto}}</option>
+                                <option value="{{i.idProducto}}"{% if data.idProducto.idProducto == i.idProducto %}selected{% endif %}>{{i.nombreProducto}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Observacion</label>
-                        <input type="" id="" name="observacion" class="form-control" placeholder="Ingrese Observacion" required>
+                        <input type="" id="" name="observacion" class="form-control" placeholder="Ingrese Observacion" value="{{data.observacion}}" required>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">cantidad de Salida</label>
-                        <input type="number" id="" name="cantidadSalida" class="form-control" placeholder="Ingrese Cantidad de Salida" required>
+                        <input type="number" id="" name="cantidadSalida" class="form-control" placeholder="Ingrese Cantidad de Salida" value="{{data.cantidadSalida}}" required>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Ingrese Valor unidad</label>
-                        <input type="number" id="" name="valorUnidad" class="form-control" placeholder="Ingrese Valor unidad" required>
+                        <input type="number" id="" name="valorUnidad" class="form-control" placeholder="Ingrese Valor unidad" value="{{data.valorUnidad}}" required>
                     </div>
+                    {% if idSalida %}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </div>
+                    {% else %}
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Enviar</button>
                     </div>
+                    {% endif %}
                 </form>
             </div>
         </div>

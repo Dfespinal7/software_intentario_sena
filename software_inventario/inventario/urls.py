@@ -16,4 +16,8 @@ urlpatterns = [
     path('form_salida',form_salida,name="form_salida"),
     path('guardar_salida',guardar_salida,name="guardar_salida"),
     path('editar_entrada<int:idEntrada>',editar_entrada,name="editar_entrada"),
+    path('editar_salida<int:idSalida>',editar_salida,name="editar_salida"),
+    path('eliminar_entrada<int:idEntrada>',eliminar_entrada,name="eliminar_entrada"),
+    path('eliminar_salida<int:idSalida>',eliminar_salida,name="eliminar_salida"),
+    path('editar_producto',form_edit_product,name="editar_producto"),
 ]
