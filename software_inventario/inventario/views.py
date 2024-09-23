@@ -221,7 +221,7 @@ def guardar_salida(request):
         producto = Productos.objects.get(pk=request.POST.get("producto"))
         obs = request.POST.get("observacion")
         cantsal = int(request.POST.get("cantidadSalida"))
-        valoru = int(request.POST.get("valorUnidad"))
+        valoru = int(request.POST.get("valorUnidad",0) or 0)
         nueva_cantidad_salida = cantsal
 
         # Obtener el stock del producto
@@ -409,5 +409,51 @@ def eliminar_salida(request, idSalida):
 
     return HttpResponseRedirect(reverse('listar_salida'))
 
-def form_edit_product(request):
-    return render(request,'inventario/producto/edit_product.html')
+def form_edit_product(request,idProducto):
+    k=Productos.objects.get(pk=idProducto)
+    cat=Categorias.objects.all()
+    context={"idProducto":idProducto,"data":k,"categorias":cat}
+    return render(request,'inventario/producto/edit_product.html',context)
+
+def guardar_edit_product(request):
+    if request.method=='POST':
+        idProducto=request.POST.get("idProducto")
+        categ=Categorias.objects.get(pk=request.POST.get("idCategoria"))
+        nombre=request.POST.get("nombreProducto")
+        unidad=request.POST.get("unidadMedida")
+        stock=request.POST.get("stock")
+
+        pro=Productos.objects.get(pk=idProducto)
+        pro.idCategoria=categ
+        pro.nombreProducto=nombre
+        pro.unidadMedida=unidad
+        pro.stock=stock
+        pro.save()
+        messages.success(request,'Producto editado correctamente')
+        return redirect('listar_producto')
+
+def buscar_producto(request):
+    if request.method=='POST':
+        prod=request.POST.get("producto")
+        query=Productos.objects.filter(nombreProducto__icontains=prod)
+        context={"prod":prod,"data":query}
+        return render(request,'inventario/producto/listar_producto.html',context)
+    else:
+        messages.warning(request,"No se encontro Usuario")
+    return HttpResponseRedirect(reverse("listar_citas"))
+
+def eliminar_producto(request,idProducto):
+    pro=Productos.objects.get(pk=idProducto)
+    pro.delete()
+    messages.warning(request,"El producto ha sido eliminado")
+    return redirect('listar_producto')
+
+def buscar_entrada(request):
+    if request.method=='POST':
+        prod=request.POST.get("producto")
+        k=Entradas.objects.filter(idProducto__nombreProducto__icontains=prod)
+        suma=0
+        for i in k:
+            suma=suma+i.cantEntInicial*i.valorUnidad
+        context={"data":k,"prod":prod,"suma":suma}
+        return render(request,'inventario/entrada/listar_entrada.html',context)

@@ -19,5 +19,9 @@ urlpatterns = [
     path('editar_salida<int:idSalida>',editar_salida,name="editar_salida"),
     path('eliminar_entrada<int:idEntrada>',eliminar_entrada,name="eliminar_entrada"),
     path('eliminar_salida<int:idSalida>',eliminar_salida,name="eliminar_salida"),
-    path('editar_producto',form_edit_product,name="editar_producto"),
+    path('editar_producto/<slug:idProducto>/',form_edit_product,name="editar_producto"),
+    path('guardar_edit_product',guardar_edit_product,name="guardar_edit_product"),
+    path('buscar_producto',buscar_producto,name="buscar_producto"),
+    path('eliminar_producto<slug:idProducto>',eliminar_producto,name="eliminar_producto"),
+    path('buscar_entrada',buscar_entrada,name="buscar_entrada"),
 ]
