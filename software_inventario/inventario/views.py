@@ -471,3 +471,118 @@ def buscar_stock(request):
         k=StockInventarios.objects.filter(idProducto__nombreProducto__icontains=pro)
         context={"data":k,"pro":pro}
         return render(request,'inventario/stock/stock_inventario.html',context)
+
+def form_proveedor(request):
+    return render(request,'inventario/proveedor/form_proveedor.html')
+
+def guardar_proveedor(request):
+    if request.method=='POST':
+        idProveedor=request.POST.get("idProveedor")
+        nom=request.POST.get("nombreProveedor")
+        doc=request.POST.get("documento")
+        if idProveedor=='':
+            pro=Proveedores(nombre=nom,documento=doc)
+            pro.save()
+            messages.success(request,'Proveedor añadido correctamente')
+            return redirect('listar_proveedor')
+        else:
+            p=Proveedores.objects.get(pk=idProveedor)
+            p.nombre=nom
+            p.documento=doc
+            p.save()
+            messages.success(request,'Proveedor editado correctamente')
+            return redirect('listar_proveedor')
+    
+def editar_proveedor(request,idProveedor):
+    pro=Proveedores.objects.get(pk=idProveedor)
+    contex={"data":pro,"idProveedor":idProveedor}
+    return render(request,'inventario/proveedor/form_proveedor.html',contex)
+
+def eliminar_proveedor(request,idProveedor):
+    p=Proveedores.objects.get(pk=idProveedor)
+    p.delete()
+    messages.warning(request,'Proveedor eliminado')
+    return redirect('listar_proveedor')
+def buscar_proveedor(request):
+    if request.method=='POST':
+        proveedor=request.POST.get("proveedor")
+        p=Proveedores.objects.filter(nombre__icontains=proveedor)
+        contex={"data":p,"proveedor":proveedor}
+        return render(request,'inventario/proveedor/listar_proveedor.html',contex)
+    
+def form_categoria(request):
+    return render(request,'inventario/categoria/form_categoria.html')
+
+def guardar_categoria(request):
+    if request.method=='POST':
+        idCategoria=request.POST.get("idCategoria")
+        nom=request.POST.get("categoria")
+        if idCategoria=='':
+            c=Categorias(nombreCategoria=nom)
+            c.save()
+            messages.success(request,'Categoria Añadida')
+            
+        else:
+            c=Categorias.objects.get(pk=idCategoria)
+            c.nombreCategoria=nom
+            c.save()
+            messages.success(request,'Categoria editada correctamente')
+        return redirect('listar_categoria')
+
+    
+def editar_categoria(request,idCategoria):
+    c=Categorias.objects.get(pk=idCategoria)
+    context={"data":c,"idCategoria":idCategoria}
+    return render(request,'inventario/categoria/form_categoria.html',context)
+
+def eliminar_categoria(request,idCategoria):
+    c=Categorias.objects.get(pk=idCategoria)
+    c.delete()
+    messages.warning(request,"Categoria Eliminada")
+    return redirect('listar_categoria')
+
+def buscar_categoria(request):
+    if request.method=='POST':
+        nombre=request.POST.get("nombre")
+        c=Categorias.objects.filter(nombreCategoria__icontains=nombre)
+        contex={"data":c,"nombre":nombre}
+        return render(request,'inventario/categoria/listar_categoria.html',contex)
+    
+def form_clientes(request):
+    return render(request,'inventario/cliente/form_cliente.html')
+
+def guardar_cliente(request):
+    if request.method=='POST':
+        idCliente=request.POST.get("idCliente")
+        nombre=request.POST.get("nombre")
+        doc=request.POST.get("documento")
+        if idCliente=='':
+            c=Clientes(nombre=nombre,documento=doc)
+            c.save()
+            messages.success(request,"Cliente añadido correctamente")
+            
+        else:
+            c=Clientes.objects.get(pk=idCliente)
+            c.nombre=nombre
+            c.documento=doc
+            c.save()
+            messages.success(request,"Cliente editado correctamente")
+        return redirect('listar_cliente')
+    
+def editar_cliente(request,idCliente):
+    c=Clientes.objects.get(pk=idCliente)
+    contex={"data":c,"idCliente":idCliente}
+    return render(request,'inventario/cliente/form_cliente.html',contex)
+
+def eliminar_cliente(request,idCliente):
+    cli=Clientes.objects.get(pk=idCliente)
+    cli.delete()
+    messages.warning(request,'Cliente Eliminado')
+    return redirect('listar_cliente')
+
+def buscar_cliente(request):
+    if request.method=='POST':
+        nom=request.POST.get("cliente")
+        c=Clientes.objects.filter(nombre__icontains=nom)
+        contex={"data":c,"nom":nom}
+        return render(request,'inventario/cliente/listar_cliente.html',contex)

@@ -8,12 +8,12 @@
     <div class="text-center">
         <h1>Inventario</h1>
     </div>
-    <form class="d-flex mb-2" role="search" method="post" action="{% url 'buscar_stock' %}">
+    <form class="d-flex mb-4" role="search" method="post" action="{% url 'buscar_stock' %}">
         {% csrf_token %}
         <input class="form-control me-2" type="search" placeholder="Ingrese nombre del Producto" aria-label="Search" name="producto">
         <button class="btn btn-outline-success" type="submit">Buscar</button>
       </form>
-    <button class="btn btn-success mb-2">Crear</button>
+    
     <table class=" table table-bordered">
         <thead class="bg-light">
             <tr>
