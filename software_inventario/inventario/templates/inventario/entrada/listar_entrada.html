@@ -13,6 +13,10 @@
         <button class="btn btn-outline-success" type="submit">Buscar</button>
       </form>
     <a href="{% url 'form_entradas' %}" class="btn btn-success mb-2">Añadir Entrada</a>
+    
+       <div class="mb-2"><strong>TOTAL COMPRAS:</strong>
+        ${{suma|format_currency}}</div> 
+    
     <table class="table table-bordered">
         <thead class="bg-light">
             <th>Id</th>
@@ -55,10 +59,7 @@
                 
             </tr>
             {% endfor %}
-            <tr>
-                <td colspan="9" class="text-right bg-light"><strong>TOTAL COMPRAS</strong></td>
-                <td>${{suma|format_currency}}</td>
-            </tr>
+            
         </tbody>
 
     </table>

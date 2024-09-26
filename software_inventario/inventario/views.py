@@ -163,45 +163,49 @@ def guardar_entrada(request):
                return HttpResponseRedirect(reverse('listar_entrada'))
           else:
                e=Entradas.objects.get(pk=idEntrada)
-               e.fechaEnt=fecha
-               e.idProveedor=proveedor
-               e.idProducto=producto
-               e.unidadMedida=unidad
-               e.observacion=obs
-               e.cantEntInicial=cantent
-               e.cantidadEntrada=cantEntActual
-               e.valorUnidad=valoru
-               e.save()  
+               if e.cantEntInicial!=e.cantidadEntrada:
+                   messages.error(request,'Las Entradas que ya han tenido salidas no pueden ser modificadas')
+                   return redirect('listar_entrada')
+               elif e.cantEntInicial==e.cantidadEntrada:
+                e.fechaEnt=fecha
+                e.idProveedor=proveedor
+                e.idProducto=producto
+                e.unidadMedida=unidad
+                e.observacion=obs
+                e.cantEntInicial=cantent
+                e.cantidadEntrada=cantent
+                e.valorUnidad=valoru
+                e.save()  
 
-               sal=Salidas.objects.filter(idProducto=producto)
-               totalsal=0
-               for i in sal:
-                   totalsal=totalsal+int(i.totalValorSal)
-               print(totalsal)
-               
-               messages.success(request,"Entrada Crada correctamente")
-               stock=StockInventarios.objects.get(idProducto=producto)
-               entra=Entradas.objects.filter(idProducto=producto)
-               totalent=0
-               valorinv=0
-               for i in entra:
-                   totalent=totalent+int(i.cantEntInicial)
-                   valorinv=valorinv+int(i.cantEntInicial)*int(i.valorUnidad)
-                   print(valorinv)
-               
+                sal=Salidas.objects.filter(idProducto=producto)
+                totalsal=0
+                for i in sal:
+                    totalsal=totalsal+int(i.totalValorSal)
+                print(totalsal)
+                
+                messages.success(request,"Entrada Crada correctamente")
+                stock=StockInventarios.objects.get(idProducto=producto)
+                entra=Entradas.objects.filter(idProducto=producto)
+                totalent=0
+                valorinv=0
+                for i in entra:
+                    totalent=totalent+int(i.cantEntInicial)
+                    valorinv=valorinv+int(i.cantEntInicial)*int(i.valorUnidad)
+                    print(valorinv)
+                
 
-               stock.totalEntrada=totalent
-               stock.valorInvenario=valorinv-totalsal
-               stock.stock=int(stock.totalEntrada)-int(stock.totalSalida)
-               stock.valorUnidad=int(stock.valorInvenario)/int(stock.stock)
-               stock.save()
+                stock.totalEntrada=totalent
+                stock.valorInvenario=valorinv-totalsal
+                stock.stock=int(stock.totalEntrada)-int(stock.totalSalida)
+                stock.valorUnidad=int(stock.valorInvenario)/int(stock.stock)
+                stock.save()
 
-               
-               actproduct=Productos.objects.get(idProducto=producto.idProducto)
-               actproduct.stock=stock.stock
-               actproduct.save()
-               
-               return HttpResponseRedirect(reverse('listar_entrada'))
+                
+                actproduct=Productos.objects.get(idProducto=producto.idProducto)
+                actproduct.stock=stock.stock
+                actproduct.save()
+                
+                return HttpResponseRedirect(reverse('listar_entrada'))
 
 
               
