@@ -2,8 +2,56 @@
 {% load static %}
 {% block titul %}Inicio{% endblock %}
 {% block container %}
-<div class="bg-white">
-    <h1>inicio</h1>
-    
-</div>
+<body>
+
+    <header class="hero text-center">
+        <div class="container">
+            <h1>Gestión de Inventario Simplificada</h1>
+            <p class="lead">Optimiza tu negocio con nuestro software fácil de usar.</p>
+            <a href="#features" class="btn btn-primary btn-lg">Descubre Más</a>
+        </div>
+    </header>
+
+    <section id="features" class="features text-center">
+        <div class="container">
+            <h2>Características Principales</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-icon">📦</div>
+                    <h3>Gestión de Productos</h3>
+                    <p>Controla tus productos con facilidad y precisión.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-icon">📊</div>
+                    <h3>Informes Detallados</h3>
+                    <p>Genera informes completos para tomar decisiones informadas.</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-icon">🔔</div>
+                    <h3>Alertas de Stock</h3>
+                    <p>Recibe notificaciones cuando el stock esté bajo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="text-center py-5">
+        <div class="container">
+            <h2>¿Listo para Empezar?</h2>
+            <p>Prueba nuestro software de inventario gratis por 30 días.</p>
+            <a href="#" class="btn btn-success btn-lg">Comienza tu Prueba Gratis</a>
+        </div>
+    </section>
+
+    <footer class="text-center py-4">
+        <div class="container">
+            <p>&copy; 2024 Software de Inventario. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>      
+
 {% endblock %}

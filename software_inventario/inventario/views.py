@@ -590,3 +590,19 @@ def buscar_cliente(request):
         c=Clientes.objects.filter(nombre__icontains=nom)
         contex={"data":c,"nom":nom}
         return render(request,'inventario/cliente/listar_cliente.html',contex)
+    
+def listar_peps(request):
+    p=Productos.objects.all()
+    contex={"productos":p}
+    return render(request,'inventario/stock/peps.html',contex)
+
+def busqueda_peps(request):
+    p=Productos.objects.all()
+    if request.method=='GET':
+        codigo=request.GET.get("codigo")
+        ent=Entradas.objects.filter(idProducto__idProducto__icontains=codigo).order_by('fechaEnt')
+        for i in ent:
+            i.diferen=int(i.cantEntInicial)-int(i.cantidadEntrada)
+        messages.success(request,f'estoy enviando get {codigo}')
+    contex={"productos":p,"entradas":ent}
+    return render(request,'inventario/stock/peps.html',contex)

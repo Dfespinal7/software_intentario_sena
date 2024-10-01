@@ -40,5 +40,7 @@ urlpatterns = [
     path('guardar_cliente/',guardar_cliente,name="guardar_cliente"),
     path('editar_cliente/<int:idCliente>',editar_cliente,name="editar_cliente"),
     path('eliminar_cliente/<int:idCliente>',eliminar_cliente,name="eliminar_cliente"),
-    path('buscar_cliente',buscar_cliente,name="buscar_cliente"),
+    path('buscar_cliente/',buscar_cliente,name="buscar_cliente"),
+    path('listar_peps/',listar_peps,name="listar_peps"),
+    path('busqueda_peps/',busqueda_peps,name="busqueda_peps"),
 ]
