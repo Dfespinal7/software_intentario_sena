@@ -15,11 +15,11 @@
                     <th><select name="codigo" id="" class="form-control" onchange="this.form.submit()">
                         <option value="">Seleccione Producto</option>
                         {% for i in productos %}
-                        <option value="{{i.idProducto}}">{{i.idProducto}}</option>
+                        <option value="{{i.idProducto}}"{% if i.idProducto == entradas.idProducto %}selected{% endif %}>{{i.idProducto}}</option>
                         {% endfor %}
                     </select></th>
                     <th class="bg-light">Producto</th>
-                    <th colspan="3" >{% for i in productos %}{{i.nombreProducto}}{% endfor %}</th>
+                    <th colspan="3" >{% if entradas %}{{ entradas.0.idProducto }}{% endif %}</th>
                 </tr>
                 <tr>
                     <th>Fecha de entrada</th>
