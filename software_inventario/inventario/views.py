@@ -603,6 +603,6 @@ def busqueda_peps(request):
         ent=Entradas.objects.filter(idProducto__idProducto__icontains=codigo).order_by('fechaEnt')
         for i in ent:
             i.diferen=int(i.cantEntInicial)-int(i.cantidadEntrada)
-        messages.success(request,f'estoy enviando get {codigo}')
+        messages.success(request,f'PEPS del producto {codigo}')
     contex={"productos":p,"entradas":ent}
     return render(request,'inventario/stock/peps.html',contex)
