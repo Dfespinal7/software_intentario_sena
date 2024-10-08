@@ -627,5 +627,6 @@ def listar_abc(request):
         i.sumat=sumatotal
         i.porcent=(sumatotal/totalinvent*100) if totalinvent else 0   
     abc = sorted(abc, key=lambda x: sum([int(e.valorUnidad) * int(e.cantEntInicial) for e in Entradas.objects.filter(idProducto=x.idProducto)]), reverse=True) 
+    
     contex={"data":abc,}
     return render(request,'inventario/stock/indicadoresabc.html',contex)
