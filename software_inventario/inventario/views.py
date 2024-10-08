@@ -606,3 +606,30 @@ def busqueda_peps(request):
         messages.success(request,f'PEPS del producto {codigo}')
     contex={"productos":p,"entradas":ent}
     return render(request,'inventario/stock/peps.html',contex)
+
+def listar_abc(request):
+    abc=StockInventarios.objects.all()
+    enta=Entradas.objects.all()
+    totalinvent=0
+    for v in enta:
+            totalinvent=int(v.cantEntInicial)*int(v.valorUnidad)+totalinvent
+    sumatotal=0
+    
+    for i in abc:
+        ent=Entradas.objects.filter(idProducto=i.idProducto)
+        suma=0
+        for e in ent:
+            if i.idProducto==e.idProducto:
+                suma=suma+(int(e.valorUnidad)*int(e.cantEntInicial))
+                sumatotal=(int(e.valorUnidad)*int(e.cantEntInicial))+sumatotal
+                
+        i.totalvalorE=suma
+        i.sumat=sumatotal
+        i.porcent=sumatotal/totalinvent*100
+        
+        
+            
+       
+        
+    contex={"data":abc,}
+    return render(request,'inventario/stock/indicadoresabc.html',contex)

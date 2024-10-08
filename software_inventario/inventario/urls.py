@@ -43,4 +43,5 @@ urlpatterns = [
     path('buscar_cliente/',buscar_cliente,name="buscar_cliente"),
     path('listar_peps/',listar_peps,name="listar_peps"),
     path('busqueda_peps/',busqueda_peps,name="busqueda_peps"),
+    path('listar_indicadoresABC/',listar_abc,name="listar_abc"),
 ]
