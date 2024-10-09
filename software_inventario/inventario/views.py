@@ -608,25 +608,30 @@ def busqueda_peps(request):
     return render(request,'inventario/stock/peps.html',contex)
 
 def listar_abc(request):
-    abc=StockInventarios.objects.all()
-    enta=Entradas.objects.all()
-    totalinvent=0
-    for v in enta:
-            totalinvent=int(v.cantEntInicial)*int(v.valorUnidad)+totalinvent
-    sumatotal=0
-    
+    abc = StockInventarios.objects.all()
+    enta = Entradas.objects.all()
+    totalinvent = sum(int(v.cantEntInicial) * int(v.valorUnidad) for v in enta)
+
+    # Crear un diccionario para almacenar las sumas de cada producto
+    valor_por_producto = {}
+
+    # Calcular totalvalorE para cada producto
     for i in abc:
-        ent=Entradas.objects.filter(idProducto=i.idProducto)
-        suma=0
-        for e in ent:
-            if i.idProducto==e.idProducto:
-                suma=suma+(int(e.valorUnidad)*int(e.cantEntInicial))
-                sumatotal=(int(e.valorUnidad)*int(e.cantEntInicial))+sumatotal
-                
-        i.totalvalorE=suma
-        i.sumat=sumatotal
-        i.porcent=(sumatotal/totalinvent*100) if totalinvent else 0   
-    abc = sorted(abc, key=lambda x: sum([int(e.valorUnidad) * int(e.cantEntInicial) for e in Entradas.objects.filter(idProducto=x.idProducto)]), reverse=True) 
-    
-    contex={"data":abc,}
-    return render(request,'inventario/stock/indicadoresabc.html',contex)
+        ent = Entradas.objects.filter(idProducto=i.idProducto)
+        suma = sum(int(e.valorUnidad) * int(e.cantEntInicial) for e in ent)
+        valor_por_producto[i.idProducto] = suma
+
+    # Ordenar los productos según su totalvalorE
+    abc = sorted(abc, key=lambda x: valor_por_producto[x.idProducto], reverse=True)
+
+    # Asignar los valores a cada producto
+    sumatotal = 0
+    for i in abc:
+        suma = valor_por_producto[i.idProducto]
+        sumatotal += suma
+        i.totalvalorE = suma
+        i.sumat = sumatotal
+        i.porcent = (sumatotal / totalinvent * 100) if totalinvent else 0
+
+    contex = {"data": abc}
+    return render(request, 'inventario/stock/indicadoresabc.html', contex)
