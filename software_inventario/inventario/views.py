@@ -650,3 +650,22 @@ def descargar_pdf_entrada(request, idEntrada):
         return HttpResponse('Error al generar el PDF')
 
     return response
+
+def descargar_pdf_salida(request,idSalida):
+    salida=Salidas.objects.get(pk=idSalida)
+    subtotal=int(salida.cantidadSalida)*int(salida.valorUnidad)
+    iva=None
+    if subtotal>0:
+        iva=subtotal*19/100
+    else:
+        iva=0
+    total=subtotal+iva
+    contex={"data":salida,"subtotal":subtotal,"iva":iva,"total":total}
+    html_content=render_to_string('inventario/salida/factura_salida.html',contex)
+    response=HttpResponse(content_type='application/pdf')
+    response['Content-Dispotition']='attachment';filename="factura.pdf"
+    pisa_status=pisa.CreatePDF(html_content,dest=response)
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF')
+
+    return response

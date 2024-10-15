@@ -62,11 +62,11 @@
                 <td>{{ data.idProducto.nombreProducto }}</td>
                 <td>{{ data.unidadMedida }}</td>
                 <td>{{ data.cantEntInicial }}</td>
-                <td>{{ data.valorUnidad|format_currency }}</td>
+                <td>${{ data.valorUnidad|format_currency }}</td>
             </tr>
             <tr>
                 <td colspan="5"><strong> Total Compra</strong></td>
-                <td>{{valor|format_currency}}</td>
+                <td>${{valor|format_currency}}</td>
             </tr>
         </tbody>
     </table>
