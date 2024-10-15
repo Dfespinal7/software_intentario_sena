@@ -3,6 +3,8 @@ from .models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.template.loader import get_template, render_to_string
+from xhtml2pdf import pisa
 #commit
 def inicio(request):
     return render(request,'inventario/inicio.html')
@@ -635,3 +637,16 @@ def listar_abc(request):
 
     contex = {"data": abc}
     return render(request, 'inventario/stock/indicadoresabc.html', contex)
+
+def descargar_pdf_entrada(request, idEntrada):
+    entrada=Entradas.objects.get(pk=idEntrada)
+    
+    contex={"data":entrada,}
+    html_content=render_to_string('inventario/entrada/remision_ent.html',contex)
+    response=HttpResponse(content_type='application/pdf')
+    response['Content-Dispotition']='attachment';filename="remision.pdf"
+    pisa_status=pisa.CreatePDF(html_content,dest=response)
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF')
+
+    return response

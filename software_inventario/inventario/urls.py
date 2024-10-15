@@ -44,4 +44,5 @@ urlpatterns = [
     path('listar_peps/',listar_peps,name="listar_peps"),
     path('busqueda_peps/',busqueda_peps,name="busqueda_peps"),
     path('listar_indicadoresABC/',listar_abc,name="listar_abc"),
+    path('pdfdescarga<int:idEntrada>',descargar_pdf_entrada,name="descargar_entrada"),
 ]
