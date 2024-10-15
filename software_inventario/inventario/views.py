@@ -640,8 +640,8 @@ def listar_abc(request):
 
 def descargar_pdf_entrada(request, idEntrada):
     entrada=Entradas.objects.get(pk=idEntrada)
-    
-    contex={"data":entrada,}
+    valor=int(entrada.cantEntInicial)*int(entrada.valorUnidad)
+    contex={"data":entrada,"valor":valor}
     html_content=render_to_string('inventario/entrada/remision_ent.html',contex)
     response=HttpResponse(content_type='application/pdf')
     response['Content-Dispotition']='attachment';filename="remision.pdf"
