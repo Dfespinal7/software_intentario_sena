@@ -669,3 +669,5 @@ def descargar_pdf_salida(request,idSalida):
         return HttpResponse('Error al generar el PDF')
 
     return response
+
+    #prueba de commit
