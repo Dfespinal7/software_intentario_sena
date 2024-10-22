@@ -706,3 +706,6 @@ def logout(request):
     except Exception as e:
         messages.error(request, f"Error: {e}")
     return redirect('vista_loguin')
+
+def vista_registro_usuario(request):
+    return render(request,'inventario/autenticacion/registrar_usuario.html')

@@ -67,7 +67,7 @@
               <a class="btn btn-primary ml-2" href="{% url 'logout' %}">cerrar sesión</a>
             {% else %}
               <a class="btn btn-outline-primary me-2" href="{% url 'vista_loguin' %}">Iniciar sesión</a>
-              <a class="btn btn-primary" href="#">Registrarse</a>
+              <a class="btn btn-primary" href="{% url 'vista_registro_usuario' %}">Registrarse</a>
             {% endif %}
           </div>
         </div>
