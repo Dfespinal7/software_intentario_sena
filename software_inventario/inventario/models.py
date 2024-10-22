@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -77,4 +78,13 @@ class StockInventarios(models.Model):
     valorInvenario=models.IntegerField(default=0) #es la multiplicacion entre el stock y valorUnidad
 
 
-
+class Usuarios(models.Model):
+    ROLES=(
+        (1,"administrador"),
+        (2,"empleado")
+    )
+    idUsuario=models.BigAutoField(primary_key=True, blank=True)
+    nombre=models.CharField(max_length=100)
+    email=models.CharField(max_length=150)
+    password=models.CharField(max_length=150)
+    rol=models.IntegerField(choices=ROLES,default=2)

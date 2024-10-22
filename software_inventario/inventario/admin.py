@@ -8,5 +8,6 @@ admin.site.register(Productos)
 admin.site.register(Entradas)
 admin.site.register(Salidas)
 admin.site.register(StockInventarios)
+admin.site.register(Usuarios)
 
 # Register your models here.

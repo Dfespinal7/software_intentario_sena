@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+
 urlpatterns = [
     path('inicio/', inicio,name="inicio"),
     path('listar_stock/', listar_stock,name="listar_stock"),
@@ -46,4 +47,9 @@ urlpatterns = [
     path('listar_indicadoresABC/',listar_abc,name="listar_abc"),
     path('pdfdescarga<int:idEntrada>',descargar_pdf_entrada,name="descargar_entrada"),
     path('facturapdf<int:idSalida>',descargar_pdf_salida,name="descargar_salida"),
+    path('loguin',vista_loguin,name="vista_loguin"),
+    path('loguincomfirm',loguin,name="loguin"),
+    path('loguout',logout,name="logout"),
+    
+    
 ]

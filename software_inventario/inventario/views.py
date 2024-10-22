@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.template.loader import get_template, render_to_string
 from xhtml2pdf import pisa
+
 #commit
 def inicio(request):
     return render(request,'inventario/inicio.html')
@@ -671,3 +672,36 @@ def descargar_pdf_salida(request,idSalida):
     return response
 
     #prueba de commit
+
+def vista_loguin(request):
+    return render(request,'inventario/autenticacion/loguin.html')
+
+def loguin(request):
+    if request.method=='POST':
+        username=request.POST.get("username")
+        password=request.POST.get("password")
+        try:
+            q=Usuarios.objects.get(email=username,password=password)
+            datos={"nombre":q.nombre,
+                   "email":q.email,
+                   "password":q.password,
+                   "rol":q.rol}
+            request.session["logueo"]=datos
+            messages.success(request,f'Bienvenido {q.nombre}!!!')
+            return redirect('inicio')
+        except Usuarios.DoesNotExist:
+            messages.error(request, "Usuario o contraseña no válidos...")
+            return render(request,'inventario/autenticacion/loguin.html')
+    else:
+        if request.session.get("logueo", False):
+            return redirect('inicio')
+        else:
+            return redirect('inicio')
+        
+def logout(request):
+    try:
+        del request.session["logueo"]
+        messages.success(request,"Sesión cerrada correctamente")
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+    return redirect('vista_loguin')
