@@ -77,9 +77,10 @@ def guardar_datos(request):
 
         q=Productos(idProducto=idProducto,idCategoria=idCategoria,nombreProducto=nombre,unidadMedida=unidadMedi,stock=stock)
         q.save()
+        resta=int(cantent)-int(cantsal)
         messages.success(request, "Producto creado correctamente")
         if int(cantent)>0:
-          k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=cantent,cantEntInicial=cantent,valorUnidad=valoruEntr,fechaEnt=fecha)
+          k=Entradas(idProveedor=idProveedor,idProducto=q,unidadMedida=unidadMedi,observacion=obsent,cantidadEntrada=resta,cantEntInicial=cantent,valorUnidad=valoruEntr,fechaEnt=fecha)
           k.save()
           messages.success(request, "Entrada Creada Correctamente")
         else:
