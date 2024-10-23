@@ -672,7 +672,7 @@ def descargar_pdf_salida(request,idSalida):
 
     return response
 
-    #prueba de commit
+    
 
 def vista_loguin(request):
     return render(request,'inventario/autenticacion/loguin.html')
@@ -709,3 +709,4 @@ def logout(request):
 
 def vista_registro_usuario(request):
     return render(request,'inventario/autenticacion/registrar_usuario.html')
+    #prueba commit
