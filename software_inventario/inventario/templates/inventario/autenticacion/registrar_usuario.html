@@ -63,7 +63,7 @@
     <div class="container mt-5">
         <div class="form-container">
             <h1 class="text-center mb-4">Registrar Usuario</h1>
-            <form action="" method="POST">
+            <form action="{% url 'registrar_usuario' %}" method="POST">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre Completo</label>

@@ -710,3 +710,26 @@ def logout(request):
 def vista_registro_usuario(request):
     return render(request,'inventario/autenticacion/registrar_usuario.html')
     #prueba commit
+
+
+def registrar_usuario(request):
+    if request.method=='POST':
+        nombre=request.POST.get("nombre")
+        emaila=request.POST.get("email")
+        password=request.POST.get("password")
+        rol=request.POST.get("rol")
+
+        usuarios=Usuarios.objects.all()
+        for i in usuarios:
+            
+            if i.email==emaila:
+                messages.error(request,'Ya existe un usuario creado con ese correo')
+                return redirect('vista_registro_usuario')
+            
+                break
+
+        usu=Usuarios(nombre=nombre,email=emaila,password=password,rol=rol)
+        usu.save()
+        messages.success(request,'Usuario registrado corectamente')
+        return redirect ('vista_loguin')
+        

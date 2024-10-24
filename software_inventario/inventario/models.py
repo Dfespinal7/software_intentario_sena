@@ -85,6 +85,6 @@ class Usuarios(models.Model):
     )
     idUsuario=models.BigAutoField(primary_key=True, blank=True)
     nombre=models.CharField(max_length=100)
-    email=models.CharField(max_length=150)
+    email=models.CharField(max_length=150, unique=True)
     password=models.CharField(max_length=150)
     rol=models.IntegerField(choices=ROLES,default=2)

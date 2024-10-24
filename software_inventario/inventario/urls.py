@@ -51,6 +51,8 @@ urlpatterns = [
     path('loguincomfirm',loguin,name="loguin"),
     path('loguout',logout,name="logout"),
     path('registro_usuario',vista_registro_usuario,name="vista_registro_usuario"),
+    path('registrar_usuario',registrar_usuario,name="registrar_usuario"),
+
     
     
 ]
