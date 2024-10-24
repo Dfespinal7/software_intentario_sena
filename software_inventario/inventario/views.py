@@ -74,6 +74,9 @@ def guardar_datos(request):
         #valoruEntr=request.POST.get("valoruEntr")
         valorinv=request.POST.get("valorinv",0) or 0
         
+        if Productos.objects.filter(idProducto=idProducto).exists():
+            messages.error(request,f'El id {idProducto} ya existe en la base de datos')
+            return redirect('form_guardar')
 
         q=Productos(idProducto=idProducto,idCategoria=idCategoria,nombreProducto=nombre,unidadMedida=unidadMedi,stock=stock)
         q.save()
@@ -725,7 +728,6 @@ def registrar_usuario(request):
             if i.email==emaila:
                 messages.error(request,'Ya existe un usuario creado con ese correo')
                 return redirect('vista_registro_usuario')
-            
                 break
 
         usu=Usuarios(nombre=nombre,email=emaila,password=password,rol=rol)
